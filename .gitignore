@@ -1,0 +1,6 @@
+*.o
+*.su
+.settings/
+.vscode/
+Debug/
+Release/
