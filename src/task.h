@@ -21,7 +21,7 @@
 #define 	SEQ_DESC_IDX_MAX 	300
 #else
 #define 	SEQ_DESC_IDX_MAX 	1100
-#define 	MEA_SEQ_DESC_IDX_MAX 	400//150//100//60 //50
+#define 	MEA_SEQ_DESC_IDX_MAX 	500//150//100//60 //50
 
 #endif
 
