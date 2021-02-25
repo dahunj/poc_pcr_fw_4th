@@ -3,10 +3,7 @@
  *
  *  Created on: 2019. 6. 18.
  *      Author: jk.choi
- * 
- *  rebasing dahunj
  */
-
 #include <stdio.h>
 #include "task.h"
 #include "util.h"
@@ -1122,8 +1119,9 @@ stSeqDesc		measure_seq_desc[MEA_SEQ_DESC_IDX_MAX] = {
 
 //Ver2.0
 		/* cycle = 3 */
+		{TASKID_SM4, 0, 0xFFFFFFF0, SMSPEED, SMOOTHON, UP},
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_1_2, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},
+		
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber1 -> 2
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_2_3, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber2 -> 3
@@ -2363,8 +2361,18 @@ void task_sm4(void)
 					mea_opr_ptr.seqact_compl_flags[ mea_opr_ptr.act_desc_idx ] = TRUE;
 					this_task.job_completed_flag = TRUE;
 					this_seq_desc = NULL;
-					set_event( ACTION_DONE_EVENT );
-					set_event( ACTION_TRIGGER_EVENT );
+
+					if(mea_opr_ptr.seq_ptr_curr->direction == UP)
+					{
+						set_event( ACTION_DONE_EVENT );
+						set_event( ACTION_TRIGGER_EVENT );
+					}
+					else if(mea_opr_ptr.seq_ptr_curr->direction == DOWN)
+					{
+						set_event( ACTION_DONE_EVENT );
+					}
+//					set_event( ACTION_DONE_EVENT );
+//					set_event( ACTION_TRIGGER_EVENT );
 					//printf("OM: event = ACTION_DONE_EVENT, event = ACTION_TRIGGER_EVENT \n");
 				}
 				else
@@ -2870,7 +2878,7 @@ void task_pel(void)
 					this_task.job_completed_flag = TRUE;
 					this_seq_desc = NULL;
 					set_event( ACTION_DONE_EVENT );
-					set_event( ACTION_TRIGGER_EVENT );
+//					set_event( ACTION_TRIGGER_EVENT );
 					//printf("PEL: event = ACTION_DONE_EVENT, event = ACTION_TRIGGER_EVENT \n");
 				}
 				else
@@ -3127,6 +3135,7 @@ void task_opt(void)
 					if( mea_opr_ptr.seq_ptr_curr->config == DIS_CONT )	
 					{
 						set_event( ACTION_DONE_EVENT );
+						set_event( ACTION_TRIGGER_EVENT );
 //						printf("OPT: event = ACTION_DONE_EVENT:     DIS_CONT\n");
 						if(mea_kind == CYCLE_OPT_MEA)	//200728 test
 						{

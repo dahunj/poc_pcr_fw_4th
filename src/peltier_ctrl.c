@@ -124,8 +124,6 @@ static uint32_t stabilize_time_counter;		// for peltier_pwm_irq
 
 st_Peltier peltctrl;
 
-uint8_t g_optic1_tube_no;
-
 uint8_t temp_err_flag = FALSE;	/* 210204 add */
 
 void peltier_ctrl_init_variables(void)
