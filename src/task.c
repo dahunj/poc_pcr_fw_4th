@@ -1,4 +1,9 @@
-
+/*
+ * task.c
+ *
+ *  Created on: 2019. 6. 18.
+ *      Author: jk.choi
+ */
 #include <stdio.h>
 #include "task.h"
 #include "util.h"
@@ -14,8 +19,8 @@
 
 #define AGEING_TEST 0
 #define EXTRACTION 0
-#define OPTIC_ACTION 1
-#define TEST 0
+#define OPTIC_ACTION 0
+#define TEST 1
 
 #define MACHINE_NUM 3
 
@@ -1101,7 +1106,7 @@ const stSeqDesc		diag_seq_desc[SEQ_DESC_IDX_MAX] = {
 #if OPTIC_ACTION
 
 
-				{TASKID_SM4, 1000, 1900, SMSPEED, SMOOTHON, DOWN},
+//				{TASKID_SM4, 1000, 4550, SMSPEED, SMOOTHON, DOWN},
 				{TASKID_PEL, 1000, 9000, 600, 0, 1},
 #endif
 
@@ -1113,28 +1118,6 @@ stSeqDesc		measure_seq_desc[MEA_SEQ_DESC_IDX_MAX] = {
 #if OPTIC_ACTION
 
 //Ver2.0
-		/* cycle = 3 */
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_1_2, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},
-		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber1 -> 2
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_2_3, 1, CONTINUE, 0},
-		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber2 -> 3
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
-		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber3 -> 4
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, DOWN},	//70
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, DIS_CONT, 0},
-
-		/* cycle = 4 */
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},	//70
-		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber4 -> 3
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
-		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber3 -> 2
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_2_3, 1, CONTINUE, 0},
-		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber2 -> 1
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, DOWN},
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_1_2, 1, DIS_CONT, 0},
-
 		/* cycle = 5 */
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_1_2, 1, CONTINUE, 0},
 		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},
@@ -1143,12 +1126,12 @@ stSeqDesc		measure_seq_desc[MEA_SEQ_DESC_IDX_MAX] = {
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber2 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber3 -> 4
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, DOWN},	//70
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, DOWN},	//70
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, DIS_CONT, 0},
 
 		/* cycle = 6 */
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},	//70
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, UP},	//70
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber4 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber3 -> 2
@@ -1165,12 +1148,12 @@ stSeqDesc		measure_seq_desc[MEA_SEQ_DESC_IDX_MAX] = {
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber2 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber3 -> 4
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, DOWN},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, DOWN},	//50
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, DIS_CONT, 0},
 
 		/* cycle = 8 */
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, UP},	//50
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber4 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber3 -> 2
@@ -1187,78 +1170,12 @@ stSeqDesc		measure_seq_desc[MEA_SEQ_DESC_IDX_MAX] = {
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber2 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber3 -> 4
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, DOWN},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, DOWN},	//50
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, DIS_CONT, 0},
-
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},	//50
-		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber4 -> 3
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
-		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber3 -> 2
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_2_3, 1, CONTINUE, 0},
-		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber2 -> 1
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, DOWN},
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_1_2, 1, DIS_CONT, 0},
-
-		/* cycle = 10 */
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_1_2, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},
-		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber1 -> 2
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_2_3, 1, CONTINUE, 0},
-		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber2 -> 3
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
-		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber3 -> 4
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, DOWN},	//50
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, DIS_CONT, 0},
-
-		/* cycle = 11 */
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},	//50
-		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber4 -> 3
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
-		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber3 -> 2
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_2_3, 1, CONTINUE, 0},
-		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber2 -> 1
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, DOWN},
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_1_2, 1, DIS_CONT, 0},
-
-		/* cycle = 12 */
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_1_2, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},
-		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber1 -> 2
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_2_3, 1, CONTINUE, 0},
-		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber2 -> 3
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
-		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber3 -> 4
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, DOWN},	//50
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, DIS_CONT, 0},
-
-		/* cycle = 13 */
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},	//50
-		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber4 -> 3
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
-		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber3 -> 2
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_2_3, 1, CONTINUE, 0},
-		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber2 -> 1
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, DOWN},
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_1_2, 1, DIS_CONT, 0},
-
-		/* cycle = 14 */
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_1_2, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},
-		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber1 -> 2
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_2_3, 1, CONTINUE, 0},
-		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber2 -> 3
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
-		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber3 -> 4
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, DOWN},	//50
-		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, DIS_CONT, 0},
-
 
 		/* cycle = 15 */
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, UP},	//50
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber4 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber3 -> 2
@@ -1275,12 +1192,12 @@ stSeqDesc		measure_seq_desc[MEA_SEQ_DESC_IDX_MAX] = {
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber2 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber3 -> 4
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, DOWN},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, DOWN},	//50
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, DIS_CONT, 0},
 
 		/* cycle = 17 */
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, UP},	//50
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber4 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber3 -> 2
@@ -1297,12 +1214,12 @@ stSeqDesc		measure_seq_desc[MEA_SEQ_DESC_IDX_MAX] = {
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber2 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber3 -> 4
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, DOWN},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, DOWN},	//50
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, DIS_CONT, 0},
 
 		/* cycle = 19 */
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, UP},	//50
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber4 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber3 -> 2
@@ -1319,12 +1236,12 @@ stSeqDesc		measure_seq_desc[MEA_SEQ_DESC_IDX_MAX] = {
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber2 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber3 -> 4
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, DOWN},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, DOWN},	//50
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, DIS_CONT, 0},
 
 		/* cycle = 21 */
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, UP},	//50
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber4 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber3 -> 2
@@ -1341,12 +1258,12 @@ stSeqDesc		measure_seq_desc[MEA_SEQ_DESC_IDX_MAX] = {
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber2 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber3 -> 4
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, DOWN},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, DOWN},	//50
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, DIS_CONT, 0},
 
 		/* cycle = 23 */
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, UP},	//50
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber4 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber3 -> 2
@@ -1363,12 +1280,12 @@ stSeqDesc		measure_seq_desc[MEA_SEQ_DESC_IDX_MAX] = {
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber2 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber3 -> 4
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, DOWN},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, DOWN},	//50
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, DIS_CONT, 0},
 
 		/* cycle = 25 */
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, UP},	//50
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber4 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber3 -> 2
@@ -1385,12 +1302,12 @@ stSeqDesc		measure_seq_desc[MEA_SEQ_DESC_IDX_MAX] = {
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber2 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber3 -> 4
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, DOWN},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, DOWN},	//50
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, DIS_CONT, 0},
 
 		/* cycle = 27 */
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, UP},	//50
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber4 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber3 -> 2
@@ -1407,12 +1324,12 @@ stSeqDesc		measure_seq_desc[MEA_SEQ_DESC_IDX_MAX] = {
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber2 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber3 -> 4
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, DOWN},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, DOWN},	//50
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, DIS_CONT, 0},
 
 		/* cycle = 29 */
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, UP},	//50
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber4 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber3 -> 2
@@ -1429,12 +1346,12 @@ stSeqDesc		measure_seq_desc[MEA_SEQ_DESC_IDX_MAX] = {
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber2 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber3 -> 4
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, DOWN},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, DOWN},	//50
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, DIS_CONT, 0},
 
 		/* cycle = 31 */
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, UP},	//50
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber4 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber3 -> 2
@@ -1451,12 +1368,12 @@ stSeqDesc		measure_seq_desc[MEA_SEQ_DESC_IDX_MAX] = {
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber2 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber3 -> 4
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, DOWN},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, DOWN},	//50
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, DIS_CONT, 0},
 
 		/* cycle = 33 */
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, UP},	//50
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber4 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber3 -> 2
@@ -1473,12 +1390,12 @@ stSeqDesc		measure_seq_desc[MEA_SEQ_DESC_IDX_MAX] = {
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber2 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber3 -> 4
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, DOWN},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, DOWN},	//50
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, DIS_CONT, 0},
 
 		/* cycle = 35 */
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, UP},	//50
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber4 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber3 -> 2
@@ -1495,12 +1412,12 @@ stSeqDesc		measure_seq_desc[MEA_SEQ_DESC_IDX_MAX] = {
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber2 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber3 -> 4
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, DOWN},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, DOWN},	//50
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, DIS_CONT, 0},
 
 		/* cycle = 37 */
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, UP},	//50
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber4 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber3 -> 2
@@ -1517,12 +1434,12 @@ stSeqDesc		measure_seq_desc[MEA_SEQ_DESC_IDX_MAX] = {
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber2 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber3 -> 4
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, DOWN},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, DOWN},	//50
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, DIS_CONT, 0},
 
 		/* cycle = 39 */
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, UP},	//50
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber4 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber3 -> 2
@@ -1539,12 +1456,12 @@ stSeqDesc		measure_seq_desc[MEA_SEQ_DESC_IDX_MAX] = {
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber2 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CCW},	// chamber3 -> 4
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, DOWN},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, DOWN},	//50
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, DIS_CONT, 0},
 
 		/* cycle = FINAL */
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_4_1, 1, CONTINUE, 0},
-		{TASKID_SM4, 0, 350, SMSPEED, SMOOTHON, UP},	//50
+		{TASKID_SM4, 0, 70, SMSPEED, SMOOTHON, UP},	//50
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber4 -> 3
 		{TASKID_OPT, 0xFFFFFFF0, CHAM_3_4, 1, CONTINUE, 0},
 		{TASKID_OM, 0xFFFFFFF0, 4500, 400, 0, CW},	// chamber3 -> 2
@@ -2730,7 +2647,7 @@ void task_pel(void)
 						}
 						#endif
 						
-						if(peltier_ctrl_pre_cond( g_RT_PRE_COND_SETPOINT,  MINUTE_UNIT * g_RT_Keeping_Minute_Peltier_Temperature ) == TRUE) 	/* 10s */
+//						if(peltier_ctrl_pre_cond( g_RT_PRE_COND_SETPOINT,  MINUTE_UNIT * g_RT_Keeping_Minute_Peltier_Temperature ) == TRUE) 	/* 10s */
 						//if( peltier_pwm_test( 100,  MINUTE_UNIT * 5 ) == TRUE )	
 						{
 							this_task.job_status = JOB_RUN;
@@ -2804,8 +2721,8 @@ void task_pel(void)
 						}
 
 						setPoint = peltier_delayed_SetPoint(g_PRE_COND_SETPOINT, OVERSHOOT_OFFSET, MINUTE_UNIT  * 4); //[4]// SECOND_UNIT*20
-						if(peltier_ctrl_pre_cond( setPoint, MINUTE_UNIT * g_Keeping_Minute_Peltier_Temperature  ) == TRUE)  //[7] // @@@ setPoint: ï¿½ï¿½ï¿½ï¿½Å¬ ï¿½ï¿½ precondition ï¿½ï¿½ï¿½ï¿½ ï¿½Âµï¿½ ï¿½ï¿½ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½
-						//if(peltier_ctrl_pre_cond( PRE_COND_SETPOINT,  MINUTE_UNIT  * 1   ) == TRUE)  /* 1min */							// @@@ MINUTE_UNIT: ï¿½ï¿½ï¿½ï¿½Å¬ ï¿½ï¿½ precondition ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½Ã°ï¿½
+						if(peltier_ctrl_pre_cond( setPoint, MINUTE_UNIT * g_Keeping_Minute_Peltier_Temperature  ) == TRUE)  //[7] // @@@ setPoint: »çÀÌÅ¬ Àü precondition ±¸°£ ¿Âµµ ¼¼ÆÃ°ª º¯¼ö
+						//if(peltier_ctrl_pre_cond( PRE_COND_SETPOINT,  MINUTE_UNIT  * 1   ) == TRUE)  /* 1min */							// @@@ MINUTE_UNIT: »çÀÌÅ¬ Àü precondition ±¸°£ À¯Áö½Ã°£ ¼¼ÆÃ°ª
 					//	if( peltier_pwm_test( 80,  MINUTE_UNIT * 5 ) == TRUE )	
 			               	//	if(peltier_ctrl_pre_cond_cooling( READY_SETPOINT, MINUTE_UNIT  * 2 ) == TRUE) 
 						//drv_peltier_fan_blow(ON);	
