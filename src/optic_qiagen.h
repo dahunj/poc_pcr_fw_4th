@@ -16,7 +16,7 @@
 #define OPT_MEA 2
 #define CYCLE_OPT_MEA 3
 
-#define BASE_MEA_ROUTINE_NO	7
+#define BASE_MEA_ROUTINE_NO	0//7
 #define MEA_ROUTINE_NO	g_ROUTINE_CYCLE_MAX
 
 typedef enum OPTIC_ST{

@@ -14,6 +14,7 @@ extern uint8_t g_optic_test1_on_flag;
 extern uint8_t g_optic_test2_on_flag;
 extern uint8_t g_op_mea_exe_flag;
 
+extern uint8_t g_optic1_tube_no;
 
 void optic_qiagen_task_init(void)
 {
@@ -494,7 +495,9 @@ static void save_measure(qia_taskType *mang, uint32_t chamber, uint32_t e1d1_val
 
     if(cham_idx < CHAM_MAX)
     {
-//        printf("opt[%d]> save chamber= %d\n", mang->opt_mang->port, chamber);
+        g_optic1_tube_no = chamber;
+			
+        printf("opt[%d]> save chamber= %d\n", mang->opt_mang->port, chamber);
 
         if(mang->base_e1d1_meas_idx[cham_idx] < BASE_MEAS_MAX)
         {
