@@ -2359,8 +2359,17 @@ void task_sm4(void)
 					mea_opr_ptr.seqact_compl_flags[ mea_opr_ptr.act_desc_idx ] = TRUE;
 					this_task.job_completed_flag = TRUE;
 					this_seq_desc = NULL;
-					set_event( ACTION_DONE_EVENT );
-					set_event( ACTION_TRIGGER_EVENT );
+					if(mea_opr_ptr.seq_ptr_curr->direction == UP)
+					{
+						set_event( ACTION_DONE_EVENT );
+						set_event( ACTION_TRIGGER_EVENT );
+					}
+					else if(mea_opr_ptr.seq_ptr_curr->direction == DOWN)
+					{
+						set_event( ACTION_DONE_EVENT );
+					}
+//					set_event( ACTION_DONE_EVENT );
+//					set_event( ACTION_TRIGGER_EVENT );
 					//printf("OM: event = ACTION_DONE_EVENT, event = ACTION_TRIGGER_EVENT \n");
 				}
 				else
@@ -2866,7 +2875,7 @@ void task_pel(void)
 					this_task.job_completed_flag = TRUE;
 					this_seq_desc = NULL;
 					set_event( ACTION_DONE_EVENT );
-					set_event( ACTION_TRIGGER_EVENT );
+					//set_event( ACTION_TRIGGER_EVENT );
 					//printf("PEL: event = ACTION_DONE_EVENT, event = ACTION_TRIGGER_EVENT \n");
 				}
 				else
@@ -3123,6 +3132,7 @@ void task_opt(void)
 					if( mea_opr_ptr.seq_ptr_curr->config == DIS_CONT )	
 					{
 						set_event( ACTION_DONE_EVENT );
+						set_event( ACTION_TRIGGER_EVENT );
 //						printf("OPT: event = ACTION_DONE_EVENT:     DIS_CONT\n");
 						if(mea_kind == CYCLE_OPT_MEA)	//200728 test
 						{
