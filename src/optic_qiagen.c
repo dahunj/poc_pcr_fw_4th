@@ -7,10 +7,6 @@ extern uint8_t infinity_start_stop_flag_opt;
 
 extern uint8_t self_check_flag;
 
-extern uint8_t g_rountine_cnt;
-extern uint8_t g_optic1_tube_no;
-extern uint8_t g_optic2_tube_no;
-
 qia_mangType qia_mang[2];
 
 
@@ -447,33 +443,17 @@ static void optic_qiagen_routine(qia_mangType *mang)
                         {
                         	mang->e2d2_meas = 0;
                         }
-                        printf("opt[%d]> e1d1= %u e2d2= %u\n", mang->port, mang->e1d1_meas, mang->e2d2_meas);
-                        {
-                            if(mang->port == MODBUS_PORT1)
-                            {
-                                float tmp;
-                                tmp = (float) mang->e1d1_meas*OPT_MULT_FACTOR;
-                                printf("optd,routine_cnt=%d, tube_no1=%d, e1d1[%d]= %d\n", g_rountine_cnt, g_optic1_tube_no, mang->port, (int)tmp);
-                                //printf("%s mV\n",sub_three(tmp));
-                            
-                                tmp = (float) mang->e2d2_meas*OPT_MULT_FACTOR;
-                                printf("optd,routine_cnt=%d, tube_no1=%d, e2d2[%d]= %d\n", g_rountine_cnt, g_optic1_tube_no, mang->port, (int)tmp);
-                                //printf("e2d2[%d]= %d.", mang->port, (int)tmp);
-                                //printf("%s mV\n",sub_three(tmp));
-                            }
-                            else if(mang->port == MODBUS_PORT2)
-                            {
-                                float tmp;
-                                tmp = (float) mang->e1d1_meas*OPT_MULT_FACTOR;
-                                printf("optd,routine_cnt=%d, tube_no2=%d, e1d1[%d]= %d\n", g_rountine_cnt, g_optic2_tube_no, mang->port, (int)tmp);
-                                //printf("%s mV\n",sub_three(tmp));
-                            
-                                tmp = (float) mang->e2d2_meas*OPT_MULT_FACTOR;
-                                printf("optd,routine_cnt=%d, tube_no2=%d, e2d2[%d]= %d\n", g_rountine_cnt, g_optic2_tube_no, mang->port, (int)tmp);
-                                //printf("e2d2[%d]= %d.", mang->port, (int)tmp);
-                                //printf("%s mV\n",sub_three(tmp));
-                            }
+//                        printf("opt[%d]> e1d1= %u e2d2= %u\n", mang->port, mang->e1d1_meas, mang->e2d2_meas);
 
+                        {
+                            float tmp;
+                            tmp = (float) mang->e1d1_meas*OPT_MULT_FACTOR;
+                            printf("e1d1[%d]= %d.", mang->port, (int)tmp);
+                            printf("%s mV\n",sub_three(tmp));
+
+                            tmp = (float) mang->e2d2_meas*OPT_MULT_FACTOR;
+                            printf("e2d2[%d]= %d.", mang->port, (int)tmp);
+                            printf("%s mV\n",sub_three(tmp));
                         }
 
                         if(mang->end_callback != NULL)
