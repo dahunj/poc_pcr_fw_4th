@@ -133,7 +133,7 @@ void drv_stepmotor_done(uint8_t id_sm)
 
 void drv_stepmotor_output_pulse(uint8_t id_sm, uint8_t rot_dir, uint16_t step_count, uint16_t  pulse_period, uint32_t config)
 {
-	printf("motor> id=%d, step=%d, period=%d, dir=%d\n", id_sm, step_count, pulse_period, rot_dir);
+//	printf("motor> id=%d, step=%d, period=%d, dir=%d\n", id_sm, step_count, pulse_period, rot_dir);
 
 	if((rot_dir != 0) && (drv_stepmotor_check_sensor(id_sm) == TRUE))
 	{
@@ -193,7 +193,7 @@ void drv_stepmotor_output_pulse(uint8_t id_sm, uint8_t rot_dir, uint16_t step_co
 
 void drv_orientalmotor_output_pulse(uint8_t id_sm, uint8_t rot_dir, uint16_t step_count, uint16_t  pulse_period)  
 {
-	printf("orien> id=%d, step=%d, period=%d, dir=%d\n", id_sm, step_count, pulse_period, rot_dir);
+//	printf("orien> id=%d, step=%d, period=%d, dir=%d\n", id_sm, step_count, pulse_period, rot_dir);
 	tim3_pwm_info[0].set_flag = TRUE;
 	tim3_pwm_info[0].g_set_pulse_num = step_count;
 	drv_orientalmotor_output_direction(ORIENTAL_MOTOR, rot_dir);
