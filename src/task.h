@@ -1,9 +1,4 @@
-/*
- * task.h
- *
- *  Created on: 2019. 6. 18.
- *      Author: jk.choi
- */
+
 
 #ifndef TASK_H_
 #define TASK_H_
@@ -58,7 +53,7 @@ opt_1 ->	| 1           3 |	  <- opt_2
 				  |   |
 				  | 4 |
 				  -----
-				    ¡è
+				    ï¿½ï¿½
 				  front
 
 */
