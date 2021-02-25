@@ -11,7 +11,7 @@
 
 extern  stTaskType	task_desc[12];
 
-// ¾Æ·¡ º¯¼ö´Â ¿îÀü Áß¿¡´Â º¯°æ ¸øÇÏ°Ô ºí·ÏÅ· ÇÊ¿ä.
+// ï¿½Æ·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½Å· ï¿½Ê¿ï¿½.
 
 int g_ROUTINE_CYCLE_MAX = 45;
 
@@ -19,11 +19,11 @@ int g_Cooling_Sec = 15; // come to target water temperature, keeping time.  Defa
 int g_Optic_Operation_Keeping_Temp_Sec = 50;//40; //38 [0,60]
 int g_Optic_No_Operation_Keeping_Temp_Sec = 40;//30; //30 [0,60]
 
-int g_Delay_time_Before_Opting_Runing = 32;//25; //15 [0,60]
+int g_Delay_time_Before_Opting_Runing = 35;//25; //15 [0,60]
 int g_Keeping_time_for_High_Temperature = 6; // 10 [0,60]
 float g_HEAT_SETPOINT = 95;  // 96,  [80, 120]
 float g_COOL_SETPOINT = 65; // 60, [0,120]
-int g_Keeping_Minute_Peltier_Temperature = 10; // 10 [0,60] minutes.
+int g_Keeping_Minute_Peltier_Temperature = 1; // 10 [0,60] minutes.
 
 float g_PRE_COND_SETPOINT = 95.0;   // 96 [0,120]
 
@@ -46,15 +46,15 @@ uint8_t Optic_Measure_Index_Flag[101] =
 		   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  // 99
 		   0
 };
-// g_rountine_cnt ?ÀÌ Æ¯Á¤ °ªÀÏ ¶§, µ¿ÀÛ.
-// ±âÁ¸¿¡´Â switch( g_rountine_cnt )  case 5,6,7,MEA_ROUTINE_NO  <==================== °ËÅä ¿ä
-// switch( g_rountine_cnt ) ±¸¹® ÂüÁ¶
+// g_rountine_cnt ?ï¿½ï¿½ Æ¯ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½.
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ switch( g_rountine_cnt )  case 5,6,7,MEA_ROUTINE_NO  <==================== ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+// switch( g_rountine_cnt ) ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 /*
  *
 ====================================
-PC->MCU ¸í·É¾î
-:[º¯¼ö¸í] [º¯¼ö°ª]
+PC->MCU ï¿½ï¿½ï¿½É¾ï¿½
+:[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½] [ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]
 
 SHOW_GLOB_VARS
 
@@ -62,14 +62,14 @@ ROUTINE_CYCLE_MAX 40
 COOLING_SEC 15
 OPTIC_OPERATION_KEEPING_TEMP_SEC 39
 OPTIC_NO_OPERATION_KEEPING_TEMP_SEC 30
-DELAY_TIME_BEFORE_OPTING_RUNING 15                           <--- ½ºÆç¸µ ¿À·ù ¹«½Ã
+DELAY_TIME_BEFORE_OPTING_RUNING 15                           <--- ï¿½ï¿½ï¿½ç¸µ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 KEEPING_MINUTE_PELTIER_TEMPERATURE 10
 KEEPING_TIME_FOR_HIGH_TEMPERATURE 10
 HEAT_SETPOINT 96
 COOL_SETPOINT 60
 PRE_COND_SETPOINT 96
 
-MEASURE_INDEX  0 4 7 9     <=== ÃÖ´ë º¯¼ö°ª °³¼ö´Â ROUTINE_CYCLE_MAX ¹Ì¸¸
+MEASURE_INDEX  0 4 7 9     <=== ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ROUTINE_CYCLE_MAX ï¿½Ì¸ï¿½
 ====================================
 
  */
@@ -166,7 +166,7 @@ void Check_Glob_Var(char *msg, int szmsg)
 			printf("g_2nd_STEP_KEEPING_TIME_SEC = %d\n", g_Optic_No_Operation_Keeping_Temp_Sec);
 		}
 	}
-	if(strncmp(msg, "DELAY_TIME_BEFORE_OPTING_RUNING", 31)==0) // 15 [0,60]                           <--- ½ºÆç¸µ ¿À·ù ¹«½Ã
+	if(strncmp(msg, "DELAY_TIME_BEFORE_OPTING_RUNING", 31)==0) // 15 [0,60]                           <--- ï¿½ï¿½ï¿½ç¸µ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	{
 		int vv;
 		sscanf(msg+32, "%d", &vv);
@@ -251,8 +251,8 @@ void Check_Glob_Var(char *msg, int szmsg)
 	}
 
 
-	if(strncmp(msg, "MEASURE_INDEX_SET", 17)==0) //   0 4 7 9     <=== ÃÖ´ë º¯¼ö°ª °³¼ö´Â ROUTINE_CYCLE_MAX ¹Ì¸¸
-	{										  // ³»ºÎ ¼ö½Å ¹öÆÛ°¡ 100 byte !!!
+	if(strncmp(msg, "MEASURE_INDEX_SET", 17)==0) //   0 4 7 9     <=== ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ROUTINE_CYCLE_MAX ï¿½Ì¸ï¿½
+	{										  // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Û°ï¿½ 100 byte !!!
 		//Optic_Measure_Index_Flag[100];
 		// refer to peltier_ctrl.c :: if(g_rountine_cnt==5) // @@@ Optic_Measure_Index_Flag
 		int vv;
@@ -263,8 +263,8 @@ void Check_Glob_Var(char *msg, int szmsg)
 			printf("Measure Index %d : %d\n", vv, Optic_Measure_Index_Flag[vv]);
 		}
 	}
-	if(strncmp(msg, "MEASURE_INDEX_RESET", 19)==0) //   0 4 7 9     <=== ÃÖ´ë º¯¼ö°ª °³¼ö´Â ROUTINE_CYCLE_MAX ¹Ì¸¸
-	{										  // ³»ºÎ ¼ö½Å ¹öÆÛ°¡ 100 byte !!!
+	if(strncmp(msg, "MEASURE_INDEX_RESET", 19)==0) //   0 4 7 9     <=== ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ROUTINE_CYCLE_MAX ï¿½Ì¸ï¿½
+	{										  // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Û°ï¿½ 100 byte !!!
 		//Optic_Measure_Index_Flag[100];
 		// refer to peltier_ctrl.c :: if(g_rountine_cnt==5) // @@@ Optic_Measure_Index_Flag
 		int vv;

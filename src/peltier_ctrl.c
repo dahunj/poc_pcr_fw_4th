@@ -79,6 +79,9 @@ uint8_t g_cool_traject_flag2 	= FALSE;
 
 uint8_t g_rountine_cnt = 1;
 uint8_t g_rountine_cnt_prev = 0;
+uint8_t g_optic1_tube_no = 0;
+uint8_t g_optic2_tube_no = 0;
+
 
 uint8_t g_temp_data_flag = FALSE; 	/* TEST DATA 1010 */
 //uint8_t g_data_start_flag = FALSE;  /* TEST DATA 1010 */
@@ -121,8 +124,6 @@ static uint8_t cooling_routine_flag = FALSE;		// for peltier_ctrl_cooling_routin
 static uint32_t stabilize_time_counter;		// for peltier_pwm_irq
 
 st_Peltier peltctrl;
-
-uint8_t g_optic1_tube_no;
 
 uint8_t temp_err_flag = FALSE;	/* 210204 add */
 
@@ -345,7 +346,7 @@ uint8_t  peltier_ctrl_cycle_routine(void)
 		
 //		setPoint = peltier_delayed_SetPoint(g_HEAT_SETPOINT, 7.0f, SECOND_UNIT*17);
 		drv_water_fan(OFF);
-		// °í¿ÂÀ¯Áö ¿Âµµ ½Ã°£. g_Keeping_time_for_High_Temperature
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Âµï¿½ ï¿½Ã°ï¿½. g_Keeping_time_for_High_Temperature
 		if( peltier_ctrl_heating_routine(g_HEAT_SETPOINT,  SECOND_UNIT * g_Keeping_time_for_High_Temperature ) == TRUE)  /* set 10 sec */
 		{
 			g_cycle_toggle = g_cycle_toggle ?  0 : 1;
@@ -365,14 +366,14 @@ uint8_t  peltier_ctrl_cycle_routine(void)
 //		else if(((g_rountine_cnt >= 5) && (g_rountine_cnt <= 7)) || ((g_rountine_cnt >= 15) && (g_rountine_cnt % 5 == 0)))
 		else if(((g_rountine_cnt >= 5) && (g_rountine_cnt <= 7)) || Optic_Measure_Index_Flag[g_rountine_cnt]==1 || (g_rountine_cnt == MEA_ROUTINE_NO))
 		{
-			// ±¤ÇÐ°èµ¿ÀÛÇÒ ¶§ À¯Áö½Ã°£ 35ÃÊ.
-			keep_time = SECOND_UNIT * g_Optic_Operation_Keeping_Temp_Sec; // 38; //[43];	//38;	//48;	// 22; //@@@  »çÀÌÅ¬ ³» 2nd step ¿Âµµ À¯Áö½Ã°£ ¼¼ÆÃ°ª º¯¼ö
+			// ï¿½ï¿½ï¿½Ð°èµ¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ã°ï¿½ 35ï¿½ï¿½.
+			keep_time = SECOND_UNIT * g_Optic_Operation_Keeping_Temp_Sec; // 38; //[43];	//38;	//48;	// 22; //@@@  ï¿½ï¿½ï¿½ï¿½Å¬ ï¿½ï¿½ 2nd step ï¿½Âµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½
 //			setPoint = peltier_delayed_SetPoint(g_COOL_SETPOINT, UNDERSHOOT_OFFSET, SECOND_UNIT*26);
 		}
 		else
 		{
-			// ±¤ÇÐ°è µ¿ÀÛÇÏÁö ¾ÊÀ» ¶§´Â 30ÃÊ.
-			keep_time = SECOND_UNIT * g_Optic_No_Operation_Keeping_Temp_Sec; //30; //[35];	//30;	//40;	// 20; //@@@  »çÀÌÅ¬ ³» 2nd step ¿Âµµ À¯Áö½Ã°£ ¼¼ÆÃ°ª º¯¼ö
+			// ï¿½ï¿½ï¿½Ð°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 30ï¿½ï¿½.
+			keep_time = SECOND_UNIT * g_Optic_No_Operation_Keeping_Temp_Sec; //30; //[35];	//30;	//40;	// 20; //@@@  ï¿½ï¿½ï¿½ï¿½Å¬ ï¿½ï¿½ 2nd step ï¿½Âµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½
 //			setPoint = peltier_delayed_SetPoint(g_COOL_SETPOINT, UNDERSHOOT_OFFSET, SECOND_UNIT*26);
 		}
 #if 0
@@ -504,7 +505,7 @@ uint8_t peltier_ctrl_heating(float target_temp, float measure_temp)
 			else if(((time - since_time) >= 600) && ((time - since_time) < 800))
 			{
 				peltctrl.pwm.pwm_period	= 100;
-				peltctrl.pwm.pwm_high	= 100;
+				peltctrl.pwm.pwm_high	= 80;
 				peltctrl.pwm.pwm_low	= peltctrl.pwm.pwm_period - peltctrl.pwm.pwm_high;
 			}
 			else
@@ -514,7 +515,7 @@ uint8_t peltier_ctrl_heating(float target_temp, float measure_temp)
 				peltctrl.pwm.pwm_low	= peltctrl.pwm.pwm_period - peltctrl.pwm.pwm_high;
 			}
 		}
-		else if(target_temp >= g_PRE_COND_SETPOINT)    // 2019.12.19
+		else if(target_temp == g_PRE_COND_SETPOINT)    // 2019.12.19
 		{
 			if(pel_smooth_flag == FALSE)		/* 0402 test */
 			{
@@ -556,7 +557,7 @@ uint8_t peltier_ctrl_heating(float target_temp, float measure_temp)
 		else if( target_temp < g_COOL_SETPOINT )  		/* 95d */
 		{
 			peltctrl.pwm.pwm_period	= 100;
-			peltctrl.pwm.pwm_high 		= 70;
+			peltctrl.pwm.pwm_high 		= 60;
 			peltctrl.pwm.pwm_low 		= peltctrl.pwm.pwm_period - peltctrl.pwm.pwm_high;
 		}
 		else
@@ -1185,14 +1186,14 @@ uint8_t peltier_ctrl_maintain_heat(float target_temp, float measure_temp)
 				if( delta_t < 0) /* falling */
 				{
 					peltctrl.pwm.pwm_period	= PELTIER_PWM_PERIOD;
-					peltctrl.pwm.pwm_high 		=  45;//50;	//40;
+					peltctrl.pwm.pwm_high 		=  40;//50;	//40;
 					peltctrl.pwm.pwm_low 		= peltctrl.pwm.pwm_period -peltctrl.pwm.pwm_high ;
 					//printf(" maintain_heat:60F:  4\n");
 				}
 				else /* Rising */
 				{
 					peltctrl.pwm.pwm_period	= PELTIER_PWM_PERIOD;
-					peltctrl.pwm.pwm_high 		=  40;	//20;
+					peltctrl.pwm.pwm_high 		=  35;	//20;
 					peltctrl.pwm.pwm_low 		= peltctrl.pwm.pwm_period -peltctrl.pwm.pwm_high ;
 					//printf(" maintain_heat:60R:  4\n");
 				}
@@ -1202,14 +1203,14 @@ uint8_t peltier_ctrl_maintain_heat(float target_temp, float measure_temp)
 				if( delta_t < 0) /* falling */
 				{
 					peltctrl.pwm.pwm_period	= PELTIER_PWM_PERIOD;
-					peltctrl.pwm.pwm_high 		= 35;//40;
+					peltctrl.pwm.pwm_high 		= 30;//40;
 					peltctrl.pwm.pwm_low 		= peltctrl.pwm.pwm_period -peltctrl.pwm.pwm_high ;
 					//printf(" maintain_heat:60F:  3\n");
 				}
 				else
 				{
 					peltctrl.pwm.pwm_period	= PELTIER_PWM_PERIOD;
-					peltctrl.pwm.pwm_high 		= 30;	//10;
+					peltctrl.pwm.pwm_high 		= 25;	//10;
 					peltctrl.pwm.pwm_low 		= peltctrl.pwm.pwm_period -peltctrl.pwm.pwm_high ;
 					//printf(" maintain_heat:60R:  3\n");
 				}
@@ -1220,7 +1221,7 @@ uint8_t peltier_ctrl_maintain_heat(float target_temp, float measure_temp)
 				if( delta_t < 0) /* falling */
 				{
 					peltctrl.pwm.pwm_period	= PELTIER_PWM_PERIOD;
-					peltctrl.pwm.pwm_high 		= 25;//30;	//20;
+					peltctrl.pwm.pwm_high 		= 20;//30;	//20;
 					peltctrl.pwm.pwm_low 		= peltctrl.pwm.pwm_period -peltctrl.pwm.pwm_high ;
 					//printf(" maintain_heat:60F:  2\n");
 				}
@@ -1228,7 +1229,7 @@ uint8_t peltier_ctrl_maintain_heat(float target_temp, float measure_temp)
 				{
 
 					peltctrl.pwm.pwm_period	= PELTIER_PWM_PERIOD;
-					peltctrl.pwm.pwm_high 		= 20;	//10;
+					peltctrl.pwm.pwm_high 		= 15;	//10;
 					peltctrl.pwm.pwm_low 		= peltctrl.pwm.pwm_period -peltctrl.pwm.pwm_high ;
 					//printf(" maintain_heat:60R:  2\n");
 				}
@@ -1293,7 +1294,7 @@ uint8_t peltier_ctrl_maintain_cool(float target_temp, float measure_temp)
 		if(target_temp >= 90)
 		{
 			peltctrl.pwm.pwm_period	= PELTIER_PWM_PERIOD;
-			peltctrl.pwm.pwm_high 		= 0;//40;//50;
+			peltctrl.pwm.pwm_high 		= 40;//50;
 			peltctrl.pwm.pwm_low 		= peltctrl.pwm.pwm_period -peltctrl.pwm.pwm_high ;
 			peltctrl.fan_ctrl_flag 			= FALSE;
 			//printf(" peltier_ctrl_maintain_cool : pwm=0: COOL\n");
@@ -1718,7 +1719,7 @@ uint8_t peltier_ctrl_cooling_routine(float setpoint, uint32_t keep_time)
 		}
 		*/
 		if(  (peltctrl.keep_time_flag == TRUE) && (keep_time_counter >=(g_Delay_time_Before_Opting_Runing*SECOND_UNIT))) 		/* Event Generate */ // keep_time_counter >= 28(first) -> 20(optic simultaneous) -> 15 (optic delay)
-		{																						// @@@ Keep_time_counter: Çü±¤ ±¤ÇÐ°è°¡ µ¿ÀÛÇÏ´Â »çÀÌÅ¬¿¡¼­ 2nd step À¯Áö½ÃÀÛ ¸î ÃÊ ÈÄ¿¡ ±¤ÇÐ°è°¡ µ¿ÀÛÇÒ °ÍÀÎÁö ¼³Á¤ÇÏ´Â º¯¼ö
+		{																						// @@@ Keep_time_counter: ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ð°è°¡ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½Å¬ï¿½ï¿½ï¿½ï¿½ 2nd step ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½Ä¿ï¿½ ï¿½ï¿½ï¿½Ð°è°¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½
 			peltier_event_gen();
 		}
 		else
@@ -2197,8 +2198,8 @@ uint8_t peltier_pwm_test(uint16_t pwm_rate, uint32_t keep_time)   /* Add 1119 */
 }
 
 
-void peltier_event_gen(void) // @@@ ÁõÆø´Ü°è¿¡¼­ »çÀÌÅ¬ ¼ö °è»êÇÏ´Â º¯¼ö. ÇØ´ç º¯¼ö°¡ 5, 6, 7 »çÀÌÅ¬°ú ¸¶Áö¸· »çÀÌÅ¬¿¡ Çü±¤ ±¤ÇÐ°è°¡ µ¿ÀÛÇÏ°Ô ¼³Á¤
-							 // @@@ Line :1913 ÀÇ peltier_event_gen ÇÔ¼ö¿¡ ±¤ÇÐ°è µ¿ÀÛ »çÀÌÅ¬ ¼³Á¤
+void peltier_event_gen(void) // @@@ ï¿½ï¿½ï¿½ï¿½ï¿½Ü°è¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å¬ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½. ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 5, 6, 7 ï¿½ï¿½ï¿½ï¿½Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ð°è°¡ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½
+							 // @@@ Line :1913 ï¿½ï¿½ peltier_event_gen ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ð°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å¬ ï¿½ï¿½ï¿½ï¿½
 {
 
 	if( g_rountine_cnt != g_rountine_cnt_prev)
@@ -2211,7 +2212,7 @@ void peltier_event_gen(void) // @@@ ÁõÆø´Ü°è¿¡¼­ »çÀÌÅ¬ ¼ö °è»êÇÏ´Â º¯¼ö. ÇØ´ç º
 			set_event( ACTION_TRIGGER_EVENT );
 			//printf("peltier_event_gen : g_rountine_cnt = 5, MEASURE_OP_EVENT, ACTION_TRIGGER_EVENT\n");
 		}
-		else if(g_rountine_cnt==6 || g_rountine_cnt==7 || Optic_Measure_Index_Flag[g_rountine_cnt]==1) // ¹èÁ¤±¹ÁÖÀÓ¼öÁ¤
+		else if(g_rountine_cnt==6 || g_rountine_cnt==7 || Optic_Measure_Index_Flag[g_rountine_cnt]==1) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¼ï¿½ï¿½ï¿½
 		{
 			set_event( ACTION_TRIGGER_EVENT );
 //			printf("peltier_event_gen : g_rountine_cnt = %u,ACTION_TRIGGER_EVENT\n", g_rountine_cnt);

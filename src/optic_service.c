@@ -10,11 +10,11 @@ qia_taskType task_mang[2] ={
 };
 
 extern uint8_t g_rountine_cnt;
+extern uint8_t g_optic1_tube_no;
 extern uint8_t g_optic_test1_on_flag;
 extern uint8_t g_optic_test2_on_flag;
 extern uint8_t g_op_mea_exe_flag;
 
-extern uint8_t g_optic1_tube_no;
 
 void optic_qiagen_task_init(void)
 {
@@ -140,7 +140,7 @@ void send_measure_msg(qia_taskType *mang, uint8_t msg_id, uint8_t ed_mode, uint8
                 tmp = tmp / (mang->base_e1d1_meas_idx[cham_idx]);
             }
 
-//            printf("opt[%d]> mode= %d avg= %d idx= %d\n", mang->opt_mang->port, ed_mode, tmp, mang->base_e1d1_meas_idx[cham_idx]);
+            printf("opt[%d]> mode= %d avg= %d idx= %d\n", mang->opt_mang->port, ed_mode, tmp, mang->base_e1d1_meas_idx[cham_idx]);
 
             if(mang->opt_mang->port == MODBUS_PORT1)
             {
@@ -501,14 +501,14 @@ static void save_measure(qia_taskType *mang, uint32_t chamber, uint32_t e1d1_val
 
         if(mang->base_e1d1_meas_idx[cham_idx] < BASE_MEAS_MAX)
         {
-//            printf("opt[%d]> base save, e1d1 idx= %d\n", mang->opt_mang->port, mang->base_e1d1_meas_idx[cham_idx]);
+            printf("opt[%d]> base save, e1d1 idx= %d\n", mang->opt_mang->port, mang->base_e1d1_meas_idx[cham_idx]);
             mang->base_e1d1_meas[cham_idx][mang->base_e1d1_meas_idx[cham_idx]] = e1d1_val;
             mang->base_e1d1_meas_idx[cham_idx]++;
         }
 
         if(mang->base_e2d2_meas_idx[cham_idx] < BASE_MEAS_MAX)
         {
-//            printf("opt[%d]> base save, e2d2 idx= %d\n", mang->opt_mang->port, mang->base_e2d2_meas_idx[cham_idx]);
+            printf("opt[%d]> base save, e2d2 idx= %d\n", mang->opt_mang->port, mang->base_e2d2_meas_idx[cham_idx]);
             mang->base_e2d2_meas[cham_idx][mang->base_e2d2_meas_idx[cham_idx]] = e2d2_val;
             mang->base_e2d2_meas_idx[cham_idx]++;
         }
@@ -557,7 +557,7 @@ static uint8_t measure_process(qia_taskType *mang, uint32_t chamber, uint16_t de
         {
             mang->task_step = QIA_TASK_START;
             optic_qiagen_request_measure(mang->opt_mang->port, optic_qiagen_callback);
-//            printf("opt[%d]> delay_ms= %d\n", mang->opt_mang->port, time);
+            printf("opt[%d]> delay_ms= %d\n", mang->opt_mang->port, time);
         }
     }
     else if(mang->task_step == QIA_TASK_DONE)
