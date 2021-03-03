@@ -63,7 +63,7 @@ const Optic_settingType q1_model[2][29] = {
 		        {ADD_REG_ON_DELAY_LED2,         2, 100},
 		        {ADD_REG_OFF_DELAY_LED1,        2, 100},
 		        {ADD_REG_OFF_DELAY_LED2,        2, 100},
-		        {ADD_REG_LED1_CURRENT,          1, LED1_CURRENT_64},	/* FAM */
+		        {ADD_REG_LED1_CURRENT,          1, LED1_CURRENT_64},	/* CY5 */
 		        {ADD_REG_LED2_CURRENT,          1, LED2_CURRENT_64},	/* HEX */
 		        {ADD_REG_LED1_CURRENT_DEFAULT,  1, LED1_CURRENT_100},
 		        {ADD_REG_LED2_CURRENT_DEFAULT,  1, LED2_CURRENT_100},

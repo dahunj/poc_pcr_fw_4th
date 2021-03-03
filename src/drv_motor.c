@@ -25,6 +25,12 @@ extern uint8_t g_optic_test2_on_flag;
 
 uint8_t self_check_flag = FALSE;
 
+/* 210303 LOG test */
+extern uint32_t ext_seq_num;
+extern uint32_t mea_seq_num;
+extern uint8_t g_op_exe_flag;
+extern uint8_t g_op_mea_exe_flag;
+
 
 void drv_stepmotor_port_init(void)
 {
@@ -134,6 +140,17 @@ void drv_stepmotor_done(uint8_t id_sm)
 void drv_stepmotor_output_pulse(uint8_t id_sm, uint8_t rot_dir, uint16_t step_count, uint16_t  pulse_period, uint32_t config)
 {
 //	printf("motor> id=%d, step=%d, period=%d, dir=%d\n", id_sm, step_count, pulse_period, rot_dir);
+	/* 210303 LOG test */
+	if((g_op_exe_flag == TRUE) && (g_op_mea_exe_flag == FALSE))
+	{
+		printf("LOG motor_id=%d, ext_seq_id=%d\n", id_sm, ext_seq_num);
+	}
+	else if((g_op_exe_flag == TRUE) && (g_op_mea_exe_flag == TRUE))
+	{
+		printf("LOG motor_id=%d, mea_seq_id=%d\n", id_sm, mea_seq_num);
+	}
+	else
+	{}
 
 	if((rot_dir != 0) && (drv_stepmotor_check_sensor(id_sm) == TRUE))
 	{
@@ -194,6 +211,19 @@ void drv_stepmotor_output_pulse(uint8_t id_sm, uint8_t rot_dir, uint16_t step_co
 void drv_orientalmotor_output_pulse(uint8_t id_sm, uint8_t rot_dir, uint16_t step_count, uint16_t  pulse_period)  
 {
 //	printf("orien> id=%d, step=%d, period=%d, dir=%d\n", id_sm, step_count, pulse_period, rot_dir);
+
+	/* 210303 LOG test */
+	if((g_op_exe_flag == TRUE) && (g_op_mea_exe_flag == FALSE))
+	{
+		printf("LOG motor_id=%d, ext_seq_id=%d\n", id_sm, ext_seq_num);
+	}
+	else if((g_op_exe_flag == TRUE) && (g_op_mea_exe_flag == TRUE))
+	{
+		printf("LOG motor_id=%d, mea_seq_id=%d\n", id_sm, mea_seq_num);
+	}
+	else
+	{}
+
 	tim3_pwm_info[0].set_flag = TRUE;
 	tim3_pwm_info[0].g_set_pulse_num = step_count;
 	drv_orientalmotor_output_direction(ORIENTAL_MOTOR, rot_dir);

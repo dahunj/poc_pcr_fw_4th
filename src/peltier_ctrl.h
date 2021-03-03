@@ -1,3 +1,9 @@
+/*
+ * peltier_ctrl.h
+ *
+ *  Created on: 2019. 7. 30.
+ *      Author: jk.choi
+ */
 
 #ifndef PELTIER_CTRL_H_
 #define PELTIER_CTRL_H_
@@ -21,15 +27,15 @@
 #define TRUE 1
 #define FALSE 0
 
-// ï¿½ï¿½ï¿½ï¿½È­. #define HEAT_SETPOINT		96//104//100//[105]//101.5 //102 //107//104//105//(95.0 + 25.0) 		/* 110d C */ //@@@  ï¿½ï¿½ï¿½ï¿½Å¬ ï¿½ï¿½ 1st step ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
-// ï¿½ï¿½ï¿½ï¿½È­. #define COOL_SETPOINT 	   60//59.5 //[58]//60//58//57//54//59//63//80  //(60.0 + 15.0)		/* 75d C */
-// ï¿½ï¿½ï¿½ï¿½È­. #define PRE_COND_SETPOINT	96//98.5//[102]//99.5//98.5//105//HEAT_SETPOINT
+// º¯¼öÈ­. #define HEAT_SETPOINT		96//104//100//[105]//101.5 //102 //107//104//105//(95.0 + 25.0) 		/* 110d C */ //@@@  »çÀÌÅ¬ ³» 1st step µ¿ÀÛ ÇÔ¼ö
+// º¯¼öÈ­. #define COOL_SETPOINT 	   60//59.5 //[58]//60//58//57//54//59//63//80  //(60.0 + 15.0)		/* 75d C */
+// º¯¼öÈ­. #define PRE_COND_SETPOINT	96//98.5//[102]//99.5//98.5//105//HEAT_SETPOINT
 #define READY_SETPOINT	66 // COOL_SETPOINT
 
 #define OVERSHOOT_OFFSET 	2.5f//5.0f //2.5f
 #define UNDERSHOOT_OFFSET  -5.0f//-6.0f//-4.0f//-8.5f//-10.0f //-12.0f//-7.0f
 
-// ï¿½ï¿½ï¿½ï¿½È­. #define ROUTINE_CYCLE_MAX 	40		// @@@ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å¬ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ define ï¿½ï¿½
+// º¯¼öÈ­. #define ROUTINE_CYCLE_MAX 	40		// @@@ µ¿ÀÛÇÒ ÃÖÁ¾ »çÀÌÅ¬ ¼³Á¤ÇÑ define °ª
 #define STABILIZE_TIME 			100
 #define HEAT_GRADIENT			6.0 ///1.1
 #define COOL_GRADIENT 		(-0.2)
@@ -37,8 +43,8 @@
 
 #define MILI_SEC_CNT_PER_SEC		1000
 #define TIME_LOSS_FACTOR_COEFF	0.9
-#define SECOND_UNIT	MILI_SEC_CNT_PER_SEC //(uint32_t)(((float)MILI_SEC_CNT_PER_SEC) * TIME_LOSS_FACTOR_COEFF) //@@@  ï¿½ï¿½ï¿½ï¿½Å¬ ï¿½ï¿½ 1st step ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
-#define MINUTE_UNIT	(SECOND_UNIT * 60)		// @@@ MINUTE_UNIT: ï¿½ï¿½ï¿½ï¿½Å¬ ï¿½ï¿½ precondition ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½Ã°ï¿½
+#define SECOND_UNIT	MILI_SEC_CNT_PER_SEC //(uint32_t)(((float)MILI_SEC_CNT_PER_SEC) * TIME_LOSS_FACTOR_COEFF) //@@@  »çÀÌÅ¬ ³» 1st step µ¿ÀÛ ÇÔ¼ö
+#define MINUTE_UNIT	(SECOND_UNIT * 60)		// @@@ MINUTE_UNIT: »çÀÌÅ¬ Àü precondition ±¸°£ À¯Áö½Ã°£ ¼¼ÆÃ°ª
 
 #if 0
 static uint8_t 	peltier_timer_flag = 0;
