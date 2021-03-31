@@ -18,8 +18,8 @@
 #define CYCLE_STEP 1
 
 #define AGEING_TEST 0
-#define EXTRACTION 1
-#define OPTIC_ACTION 0
+#define EXTRACTION 0
+#define OPTIC_ACTION 1
 #define TEST 0
 
 #define MACHINE_NUM 3
@@ -1115,7 +1115,7 @@ const stSeqDesc		diag_seq_desc[SEQ_DESC_IDX_MAX] = {
 #if OPTIC_ACTION
 
 
-				{TASKID_SM4, 3800, 4550, SMSPEED, SMOOTHON, DOWN},
+				//{TASKID_SM4, 3800, 4550, SMSPEED, SMOOTHON, DOWN},
 				{TASKID_PEL, 3800, 9000, 600, 0, 1},
 #endif
 
@@ -2768,9 +2768,7 @@ void task_pel(void)
 		printf("%s, %d.%s,",system_elapsedTime(), (int)thermo_temp[0], sub_three(thermo_temp[0]));
 		printf(" %d.%s,",(int)thermo_temp[1], sub_three(thermo_temp[1]));
 		printf(" %d, %d%%\n", (int)peltctrl.setpoint, peltctrl.pwm.pwm_high);
-		//printf("pel> Cycle done\n");
-		//printf("g_rountine_cnt = %d\n", (int)g_rountine_cnt);
-
+		
 		if(g_pel_ctrl_heat_flag == TRUE)
 		{
 			if(g_pel_temp_check_flag == FALSE)
@@ -2946,8 +2944,8 @@ void task_pel(void)
 						}
 
 						setPoint = peltier_delayed_SetPoint(g_PRE_COND_SETPOINT, OVERSHOOT_OFFSET, MINUTE_UNIT  * 4); //[4]// SECOND_UNIT*20
-						if(peltier_ctrl_pre_cond( setPoint, MINUTE_UNIT * g_Keeping_Minute_Peltier_Temperature  ) == TRUE)  //[7] // @@@ setPoint: »çÀÌÅ¬ Àü precondition ±¸°£ ¿Âµµ ¼¼ÆÃ°ª º¯¼ö
-						//if(peltier_ctrl_pre_cond( PRE_COND_SETPOINT,  MINUTE_UNIT  * 1   ) == TRUE)  /* 1min */							// @@@ MINUTE_UNIT: »çÀÌÅ¬ Àü precondition ±¸°£ À¯Áö½Ã°£ ¼¼ÆÃ°ª
+						if(peltier_ctrl_pre_cond( setPoint, MINUTE_UNIT * g_Keeping_Minute_Peltier_Temperature  ) == TRUE)  //[7] // @@@ setPoint: ï¿½ï¿½ï¿½ï¿½Å¬ ï¿½ï¿½ precondition ï¿½ï¿½ï¿½ï¿½ ï¿½Âµï¿½ ï¿½ï¿½ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½
+						//if(peltier_ctrl_pre_cond( PRE_COND_SETPOINT,  MINUTE_UNIT  * 1   ) == TRUE)  /* 1min */							// @@@ MINUTE_UNIT: ï¿½ï¿½ï¿½ï¿½Å¬ ï¿½ï¿½ precondition ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½Ã°ï¿½
 					//	if( peltier_pwm_test( 80,  MINUTE_UNIT * 5 ) == TRUE )	
 			               	//	if(peltier_ctrl_pre_cond_cooling( READY_SETPOINT, MINUTE_UNIT  * 2 ) == TRUE) 
 						//drv_peltier_fan_blow(ON);	
