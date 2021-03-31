@@ -202,7 +202,7 @@ void send_measure_msg(qia_taskType *mang, uint8_t msg_id, uint8_t ed_mode, uint8
                 tmp = tmp / (mang->base_e2d2_meas_idx[cham_idx]);
             }
 
-            printf("opt[%d]> mode= %d avg= %d idx= %d\n", mang->opt_mang->port, ed_mode, tmp, mang->base_e2d2_meas_idx[cham_idx]);
+//           printf("opt[%d]> mode= %d avg= %d idx= %d\n", mang->opt_mang->port, ed_mode, tmp, mang->base_e2d2_meas_idx[cham_idx]);
             
             if(mang->opt_mang->port == MODBUS_PORT1)
             {
