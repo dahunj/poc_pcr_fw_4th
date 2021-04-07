@@ -1,9 +1,3 @@
-/*
- * drv_i2c.h
- *
- *  Created on: 2019. 9. 3.
- *      Author: jk.choi
- */
 
 #ifndef DRV_I2C_H_
 #define DRV_I2C_H_
