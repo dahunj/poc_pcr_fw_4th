@@ -1,10 +1,3 @@
-/*
- * drv_usart.c
- *
- *  Created on: 2019. 7. 25.
- *      Author: jk.choi
- */
-
 #include  <stdio.h>
 #include  <string.h>
 #include  <ctype.h>
