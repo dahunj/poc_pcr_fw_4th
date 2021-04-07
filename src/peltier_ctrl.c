@@ -1,4 +1,9 @@
-
+/*
+ * peltier_ctrl.c
+ *
+ *  Created on: 2019. 7. 30.
+ *      Author: jk.choi
+ */
 #include "peltier_ctrl.h"
 #include "drv_peltier.h"
 #include "util.h"

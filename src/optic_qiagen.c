@@ -436,8 +436,16 @@ static void optic_qiagen_routine(qia_mangType *mang)
                         mang->meas_state = QIA_MEAS_NONE;
                         mang->job_state  = QIA_JOB_RUN;
                         
-                        mang->e1d1_meas = mang->e1d1_onOff_raw[0] - mang->e1d1_onOff_raw[1];
+//                       mang->e1d1_meas = mang->e1d1_onOff_raw[0] - mang->e1d1_onOff_raw[1];
 //                       mang->e2d2_meas = mang->e2d2_onOff_raw[0] - mang->e2d2_onOff_raw[1];
+                        if(mang->e1d1_onOff_raw[0] >= mang->e1d1_onOff_raw[1])
+                        {
+                        	mang->e1d1_meas = mang->e1d1_onOff_raw[0] - mang->e1d1_onOff_raw[1];
+                        }
+                        else
+                        {
+                        	mang->e1d1_meas = 0;
+                        }
 
                         if(mang->e2d2_onOff_raw[0] >= mang->e2d2_onOff_raw[1])	/* 20.06.30 test */
                         {
@@ -447,7 +455,7 @@ static void optic_qiagen_routine(qia_mangType *mang)
                         {
                         	mang->e2d2_meas = 0;
                         }
-                        printf("opt[%d]> e1d1= %u e2d2= %u\n", mang->port, mang->e1d1_meas, mang->e2d2_meas);
+//                        printf("opt[%d]> e1d1= %u e2d2= %u\n", mang->port, mang->e1d1_meas, mang->e2d2_meas);
                         {
                             if(mang->port == MODBUS_PORT1)
                             {

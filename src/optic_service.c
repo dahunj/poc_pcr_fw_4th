@@ -497,7 +497,7 @@ static void save_measure(qia_taskType *mang, uint32_t chamber, uint32_t e1d1_val
     {
         g_optic1_tube_no = chamber;
 			
-        printf("opt[%d]> save chamber= %d\n", mang->opt_mang->port, chamber);
+//        printf("opt[%d]> save chamber= %d\n", mang->opt_mang->port, chamber);
 
         if(mang->base_e1d1_meas_idx[cham_idx] < BASE_MEAS_MAX)
         {

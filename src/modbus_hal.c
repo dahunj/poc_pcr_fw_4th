@@ -8,9 +8,16 @@ static mod_ManageType mod_mang[2];
 static uint8_t rxData[2][TRX_BUF_MAX];
 static MOD_COMM_ST_E mod_state[2];
 
+extern uint16_t g_optic_current_FAM;
+extern uint16_t g_optic_current_ROX;
+extern uint16_t g_optic_current_HEX;
+extern uint16_t g_optic_current_CY5;
+
+
+
 #if 1
 // note: If 'bytes' is 1, high byte of value is used.
-const Optic_settingType q1_model[2][29] = {
+ Optic_settingType q1_model[2][29] = {
 		{
 				{ADD_REG_CYCLES,				2, 1},
 				{ADD_REG_CYCLE_TIME,			2, 1},
@@ -32,14 +39,14 @@ const Optic_settingType q1_model[2][29] = {
 				{ADD_REG_ON_DELAY_LED2,			2, 100},
 				{ADD_REG_OFF_DELAY_LED1,		2, 100},
 				{ADD_REG_OFF_DELAY_LED2,		2, 100},
-				{ADD_REG_LED1_CURRENT,			1, LED1_CURRENT_64},	/* FAM */
-				{ADD_REG_LED2_CURRENT,			1, LED2_CURRENT_150},	/* ROX */
+				{ADD_REG_LED1_CURRENT,			1, LED1_CURRENT_20},	/* HEX */
+				{ADD_REG_LED2_CURRENT,			1, LED2_CURRENT_10},	/* CY5 */
 				{ADD_REG_LED1_CURRENT_DEFAULT,	1, LED1_CURRENT_100},
 				{ADD_REG_LED2_CURRENT_DEFAULT,	1, LED2_CURRENT_100},
 				{ADD_REG_LED1_CURRENT_MAX,		1, LED1_CURRENT_250},
 				{ADD_REG_LED2_CURRENT_MAX,		1, LED2_CURRENT_250},
-				{ADD_REG_LED1_CURRENT_MIN,		1, LED1_CURRENT_10},
-				{ADD_REG_LED2_CURRENT_MIN,		1, LED2_CURRENT_10},
+				{ADD_REG_LED1_CURRENT_MIN,		1, LED1_CURRENT_00},
+				{ADD_REG_LED2_CURRENT_MIN,		1, LED2_CURRENT_00},
 				{ADD_REG_ADC_SAMPLING,			2, 100},
 		},
 		{
@@ -63,14 +70,14 @@ const Optic_settingType q1_model[2][29] = {
 		        {ADD_REG_ON_DELAY_LED2,         2, 100},
 		        {ADD_REG_OFF_DELAY_LED1,        2, 100},
 		        {ADD_REG_OFF_DELAY_LED2,        2, 100},
-		        {ADD_REG_LED1_CURRENT,          1, LED1_CURRENT_64},	/* CY5 */
-		        {ADD_REG_LED2_CURRENT,          1, LED2_CURRENT_64},	/* HEX */
+		        {ADD_REG_LED1_CURRENT,          1, LED1_CURRENT_20},	/* FAM */
+		        {ADD_REG_LED2_CURRENT,          1, LED2_CURRENT_20},	/* HEX filter */
 		        {ADD_REG_LED1_CURRENT_DEFAULT,  1, LED1_CURRENT_100},
 		        {ADD_REG_LED2_CURRENT_DEFAULT,  1, LED2_CURRENT_100},
 		        {ADD_REG_LED1_CURRENT_MAX,      1, LED1_CURRENT_250},
 		        {ADD_REG_LED2_CURRENT_MAX,      1, LED2_CURRENT_250},
-		        {ADD_REG_LED1_CURRENT_MIN,      1, LED1_CURRENT_10},
-		        {ADD_REG_LED2_CURRENT_MIN,      1, LED2_CURRENT_10},
+		        {ADD_REG_LED1_CURRENT_MIN,      1, LED1_CURRENT_00},
+		        {ADD_REG_LED2_CURRENT_MIN,      1, LED2_CURRENT_00},
 		        {ADD_REG_ADC_SAMPLING,          2, 100},
 		},
 };
@@ -999,14 +1006,482 @@ void mod_get_setting(uint8_t port, const Optic_settingType **setting, uint16_t *
 
     if(port == MODBUS_PORT1)
     {
+        q1_model[0][20].value = g_optic_current_HEX; //ADD_REG_LED1_CURRENT, LED1_CURRENT_64
+        q1_model[0][21].value = g_optic_current_CY5; //ADD_REG_LED1_CURRENT, LED1_CURRENT_64
+        
         *setting = &q1_model[0][0];
         *cnt = sizeof(q1_model[0]) / sizeof(Optic_settingType);
     }
     else if(port == MODBUS_PORT2)
     {
+        q1_model[1][20].value = g_optic_current_FAM; //ADD_REG_LED1_CURRENT, LED1_CURRENT_64
+        q1_model[1][21].value = g_optic_current_ROX; //ADD_REG_LED1_CURRENT, LED1_CURRENT_64
         *setting = &q1_model[1][0];
         *cnt = sizeof(q1_model[0]) / sizeof(Optic_settingType);
     }
     else
     {}
+}
+
+uint32_t Dec_to_Hex(int dec)
+{
+	uint32_t hex;
+	switch(dec)
+	{
+		case 0:
+			hex = 0x0000;
+			break;
+		case 1:
+			hex = 0x0100;
+			break;
+		case 2:
+			hex = 0x0200;
+			break;
+		case 3:
+			hex = 0x0300;
+			break;
+		case 4:
+			hex = 0x0400;
+			break;
+		case 5:
+			hex = 0x0500;
+			break;
+		case 6:
+			hex = 0x0600;
+			break;
+		case 7:
+			hex = 0x0700;
+			break;
+		case 8:
+			hex = 0x0800;
+			break;
+		case 9:
+			hex = 0x0900;
+			break;
+		case 10:
+			hex = 0x0A00;
+			break;
+		case 11:
+			hex = 0x0B00;
+			break;
+		case 12:
+			hex = 0x0C00;
+			break;
+		case 13:
+			hex = 0x0D00;
+			break;
+		case 14:
+			hex = 0x0E00;
+			break;
+		case 15:
+			hex = 0x0F00;
+			break;
+		case 16:
+			hex = 0x1000;
+			break;
+		case 17:
+			hex = 0x1100;
+			break;
+		case 18:
+			hex = 0x1200;
+			break;
+		case 19:
+			hex = 0x1300;
+			break;
+		case 20:
+			hex = 0x1400;
+			break;
+		case 21:
+			hex = 0x1500;
+			break;
+		case 22:
+			hex = 0x1600;
+			break;
+		case 23:
+			hex = 0x1700;
+			break;
+		case 24:
+			hex = 0x1800;
+			break;
+		case 25:
+			hex = 0x1900;
+			break;
+		case 26:
+			hex = 0x1A00;
+			break;
+		case 27:
+			hex = 0x1B00;
+			break;
+		case 28:
+			hex = 0x1C00;
+			break;
+		case 29:
+			hex = 0x1D00;
+			break;
+		case 30:
+			hex = 0x1E00;
+			break;
+		case 31:
+			hex = 0x1F00;
+			break;
+		case 32:
+			hex = 0x2000;
+			break;
+		case 33:
+			hex = 0x2100;
+			break;
+		case 34:
+			hex = 0x2200;
+			break;
+		case 35:
+			hex = 0x2300;
+			break;
+		case 36:
+			hex = 0x2400;
+			break;
+		case 37:
+			hex = 0x2500;
+			break;
+		case 38:
+			hex = 0x2600;
+			break;
+		case 39:
+			hex = 0x2700;
+			break;
+		case 40:
+			hex = 0x2800;
+			break;
+		case 41:
+			hex = 0x2900;
+			break;
+		case 42:
+			hex = 0x2A00;
+			break;
+		case 43:
+			hex = 0x2B00;
+			break;
+		case 44:
+			hex = 0x2C00;
+			break;
+		case 45:
+			hex = 0x2D00;
+			break;
+		case 46:
+			hex = 0x2E00;
+			break;
+		case 47:
+			hex = 0x2F00;
+			break;
+		case 48:
+			hex = 0x3000;
+			break;
+		case 49:
+			hex = 0x3100;
+			break;
+		case 50:
+			hex = 0x3200;
+			break;
+		case 51:
+			hex = 0x3300;
+			break;
+		case 52:
+			hex = 0x3400;
+			break;
+		case 53:
+			hex = 0x3500;
+			break;
+		case 54:
+			hex = 0x3600;
+			break;
+		case 55:
+			hex = 0x3700;
+			break;
+		case 56:
+			hex = 0x3800;
+			break;
+		case 57:
+			hex = 0x3900;
+			break;
+		case 58:
+			hex = 0x3A00;
+			break;
+		case 59:
+			hex = 0x3B00;
+			break;
+		case 60:
+			hex = 0x3C00;
+			break;
+		case 61:
+			hex = 0x3D00;
+			break;
+		case 62:
+			hex = 0x3E00;
+			break;
+		case 63:
+			hex = 0x3F00;
+			break;
+		case 64:
+			hex = 0x4000;
+			break;
+		case 65:
+			hex = 0x4100;
+			break;
+		case 66:
+			hex = 0x4200;
+			break;
+		case 67:
+			hex = 0x4300;
+			break;
+		case 68:
+			hex = 0x4400;
+			break;
+		case 69:
+			hex = 0x4500;
+			break;
+		case 70:
+			hex = 0x4600;
+			break;
+		case 71:
+			hex = 0x4700;
+			break;
+		case 72:
+			hex = 0x4800;
+			break;
+		case 73:
+			hex = 0x4900;
+			break;
+		case 74:
+			hex = 0x4A00;
+			break;
+		case 75:
+			hex = 0x4B00;
+			break;
+		case 76:
+			hex = 0x4C00;
+			break;
+		case 77:
+			hex = 0x4D00;
+			break;
+		case 78:
+			hex = 0x4E00;
+			break;
+		case 79:
+			hex = 0x4F00;
+			break;
+		case 80:
+			hex = 0x5000;
+			break;
+		case 81:
+			hex = 0x5100;
+			break;
+		case 82:
+			hex = 0x5200;
+			break;
+		case 83:
+			hex = 0x5300;
+			break;
+		case 84:
+			hex = 0x5400;
+			break;
+		case 85:
+			hex = 0x5500;
+			break;
+		case 86:
+			hex = 0x5600;
+			break;
+		case 87:
+			hex = 0x5700;
+			break;
+		case 88:
+			hex = 0x5800;
+			break;
+		case 89:
+			hex = 0x5900;
+			break;
+		case 90:
+			hex = 0x5A00;
+			break;
+		case 91:
+			hex = 0x5B00;
+			break;
+		case 92:
+			hex = 0x5C00;
+			break;
+		case 93:
+			hex = 0x5D00;
+			break;
+		case 94:
+			hex = 0x5E00;
+			break;
+		case 95:
+			hex = 0x5F00;
+			break;
+		case 96:
+			hex = 0x6000;
+			break;
+		case 97:
+			hex = 0x6100;
+			break;
+		case 98:
+			hex = 0x6200;
+			break;
+		case 99:
+			hex = 0x6300;
+			break;
+		case 100:
+			hex = 0x6400;
+			break;
+		case 101:
+			hex = 0x6500;
+			break;
+		case 102:
+			hex = 0x6600;
+			break;
+		case 103:
+			hex = 0x6700;
+			break;
+		case 104:
+			hex = 0x6800;
+			break;
+		case 105:
+			hex = 0x6900;
+			break;
+		case 106:
+			hex = 0x6A00;
+			break;
+		case 107:
+			hex = 0x6B00;
+			break;
+		case 108:
+			hex = 0x6C00;
+			break;
+		case 109:
+			hex = 0x6D00;
+			break;
+		case 110:
+			hex = 0x6E00;
+			break;
+		case 111:
+			hex = 0x6F00;
+			break;
+		case 112:
+			hex = 0x7000;
+			break;
+		case 113:
+			hex = 0x7100;
+			break;
+		case 114:
+			hex = 0x7200;
+			break;
+		case 115:
+			hex = 0x7300;
+			break;
+		case 116:
+			hex = 0x7400;
+			break;
+		case 117:
+			hex = 0x7500;
+			break;
+		case 118:
+			hex = 0x7600;
+			break;
+		case 119:
+			hex = 0x7700;
+			break;
+		case 120:
+			hex = 0x7800;
+			break;
+		case 121:
+			hex = 0x7900;
+			break;
+		case 122:
+			hex = 0x7A00;
+			break;
+		case 123:
+			hex = 0x7B00;
+			break;
+		case 124:
+			hex = 0x7C00;
+			break;
+		case 125:
+			hex = 0x7D00;
+			break;
+		case 126:
+			hex = 0x7E00;
+			break;
+		case 127:
+			hex = 0x7F00;
+			break;
+		case 128:
+			hex = 0x8000;
+			break;
+		case 129:
+			hex = 0x8100;
+			break;
+		case 130:
+			hex = 0x8200;
+			break;
+		case 131:
+			hex = 0x8300;
+			break;
+		case 132:
+			hex = 0x8400;
+			break;
+		case 133:
+			hex = 0x8500;
+			break;
+		case 134:
+			hex = 0x8600;
+			break;
+		case 135:
+			hex = 0x8700;
+			break;
+		case 136:
+			hex = 0x8800;
+			break;
+		case 137:
+			hex = 0x8900;
+			break;
+		case 138:
+			hex = 0x8A00;
+			break;
+		case 139:
+			hex = 0x8B00;
+			break;
+		case 140:
+			hex = 0x8C00;
+			break;
+		case 141:
+			hex = 0x8D00;
+			break;
+		case 142:
+			hex = 0x8E00;
+			break;
+		case 143:
+			hex = 0x8F00;
+			break;
+		case 144:
+			hex = 0x9000;
+			break;
+		case 145:
+			hex = 0x9100;
+			break;
+		case 146:
+			hex = 0x9200;
+			break;
+		case 147:
+			hex = 0x9300;
+			break;
+		case 148:
+			hex = 0x9400;
+			break;
+		case 149:
+			hex = 0x9500;
+			break;
+		case 150:
+			hex = 0x9600;
+			break;
+	}
+
+	return hex;
 }

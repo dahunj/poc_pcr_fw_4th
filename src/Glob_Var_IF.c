@@ -23,13 +23,22 @@ int g_Delay_time_Before_Opting_Runing = 22;//25; //15 [0,60]
 int g_Keeping_time_for_High_Temperature = 6; // 10 [0,60]
 float g_HEAT_SETPOINT = 103;  // 96,  [80, 120]
 float g_COOL_SETPOINT = 66; // 60, [0,120]
-int g_Keeping_Minute_Peltier_Temperature = 1; // 10 [0,60] minutes.
+int g_Keeping_Minute_Peltier_Temperature = 7;//1; // 10 [0,60] minutes.
 
 float g_PRE_COND_SETPOINT = 97.0;   // 96 [0,120]
 
 int g_RT_Keeping_Minute_Peltier_Temperature = 7;
 float g_RT_PRE_COND_SETPOINT = 50.0; // 50 1cycle
 
+uint32_t g_optic_current_FAM = 0x8000;
+uint32_t g_optic_current_ROX = 0x8000;
+uint32_t g_optic_current_HEX = 0x8000;
+uint32_t g_optic_current_CY5 = 0x8000;
+
+uint16_t check_FAM = 0;
+uint16_t check_ROX = 0;
+uint16_t check_HEX = 0;
+uint16_t check_CY5 = 0;
 
 uint8_t Optic_Measure_Index_Flag[101] =
 {
@@ -38,7 +47,7 @@ uint8_t Optic_Measure_Index_Flag[101] =
 		   1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // 19
 		   1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // 29
 		   1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // 39
-		   1, 0, 0, 0, 0, 0, 0, 0, 0, 0,  // 49
+		   1, 0, 0, 0, 0, 1, 0, 0, 0, 0,  // 49
 		   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  // 59
 		   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  // 69
 		   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  // 79
@@ -126,6 +135,59 @@ void Check_Glob_Var(char *msg, int szmsg)
 	}
 	//////////////////////////////////////////////////////////////////////////////////
 	// set internal global variables
+	
+	if(strncmp(msg, "OPTIC_CURRENT_FAM", 17) == 0)
+	{
+		int vv;
+		sscanf(msg+18, "%d", &vv);
+		if(vv>=0 && vv<65535)
+		{
+			check_FAM = vv;
+			g_optic_current_FAM = Dec_to_Hex(vv);
+			printf("g_optic_current_FAM = %d\n", check_FAM);
+		}
+	}
+
+	if(strncmp(msg, "OPTIC_CURRENT_ROX", 17) == 0)
+	{
+		int vv;
+		sscanf(msg+18, "%d", &vv);
+		if(vv>=0 && vv<65535)
+		{
+			check_ROX = vv;
+			g_optic_current_ROX = Dec_to_Hex(vv);
+			printf("g_optic_current_ROX = %d\n", check_ROX);
+		}
+	}
+
+	if(strncmp(msg, "OPTIC_CURRENT_HEX", 17) == 0)
+	{
+		int vv;
+		sscanf(msg+18, "%d", &vv);
+		if(vv>=0 && vv<65535)
+		{
+			check_HEX = vv;
+			g_optic_current_HEX = Dec_to_Hex(vv);
+			printf("g_optic_current_HEX = %d\n", check_HEX);
+		}
+	}
+
+	if(strncmp(msg, "OPTIC_CURRENT_CY5", 17) == 0)
+	{
+		int vv;
+		sscanf(msg+18, "%d", &vv);
+		if(vv>=0 && vv<65535)
+		{
+			check_CY5 = vv;
+			g_optic_current_CY5 = Dec_to_Hex(vv);
+			printf("g_optic_current_CY5 = %d\n", check_CY5);
+		}
+	}
+
+
+
+
+	
 	if(strncmp(msg, "FINAL_CYCLE", 11)==0) // dflt 40 [1,100]
 	{
 		int vv;
@@ -180,7 +242,7 @@ void Check_Glob_Var(char *msg, int szmsg)
 	{
 		int vv;
 		sscanf(msg+25, "%d", &vv);
-		if(vv>=0 && vv<=60)
+		if(vv>=0 && vv<=600)
 		{
 			g_Keeping_Minute_Peltier_Temperature = vv;
 			printf("g_PRECOND_KEEPING_TIME_MIN = %d\n", g_Keeping_Minute_Peltier_Temperature);
@@ -280,6 +342,7 @@ void Check_Glob_Var(char *msg, int szmsg)
 //		GPIO_WriteBit( GPIOB, GPIO_Pin_15, 1);
 		drv_inside_LED(ON);
 //		drv_water_fan(ON);
+//		drv_UV_LED(ON);
 		printf("FAN2_ON\n");
 	}
 	if(strncmp(msg, "FAN2_OFF", 8)==0)
@@ -287,6 +350,7 @@ void Check_Glob_Var(char *msg, int szmsg)
 //		GPIO_WriteBit( GPIOB, GPIO_Pin_15, 0);
 		drv_inside_LED(OFF);
 //		drv_water_fan(OFF);
+//		drv_UV_LED(OFF);
 		printf("FAN2_OFF\n");
 	}
 	if(strncmp(msg, "DOOR_LOCK", 9)==0)		//DOOR_OPEN
@@ -302,7 +366,7 @@ void Check_Glob_Var(char *msg, int szmsg)
 	if(strncmp(msg, "FELTIER_TEST", 12)==0)		//bjk 200902 add
 	{
 		printf("FELTIER_TEST\n");
-		drv_self_check();
+		ADC1_peltier_check();
 	}
 	if(strncmp(msg, "check_start", 11)==0)		//bjk 200907 add
 	{
@@ -320,7 +384,7 @@ void Check_Glob_Var(char *msg, int szmsg)
 		else
 		{}
 	}
-	if(strncmp(msg, "UV_C_START", 10)==0)		//bjk 201021 test
+	if(strncmp(msg, "UV_C", 10)==0)		//bjk 201021 test
 	{
 
 	}
@@ -329,6 +393,7 @@ void Check_Glob_Var(char *msg, int szmsg)
 	if(strncmp(msg, "SHOW_GLOB_VARS", 14)==0)
 	{
 		Print_Glob_Vars();
+		task_init();
 	}
 }
 void Print_Glob_Vars()
@@ -368,6 +433,19 @@ void Print_Glob_Vars()
    for(int i = 0; i < 10000; i++)
    {}
    printf("g_RT_PRE_COND_SETPOINT = %d\n", (int)g_RT_PRE_COND_SETPOINT);
+   for(int i = 0; i < 10000; i++)
+   {}
+
+   printf("g_optic_current_FAM = %d\n", (int)check_FAM);
+   for(int i = 0; i < 10000; i++)
+   {}
+   printf("g_optic_current_ROX = %d\n", (int)check_ROX);
+   for(int i = 0; i < 10000; i++)
+   {}
+   printf("g_optic_current_HEX = %d\n", (int)check_HEX);
+   for(int i = 0; i < 10000; i++)
+   {}
+   printf("g_optic_current_CY5 = %d\n", (int)check_CY5);
    for(int i = 0; i < 10000; i++)
    {}
 

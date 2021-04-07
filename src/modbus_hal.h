@@ -265,6 +265,7 @@ typedef struct{
 #define LED1_CURRENT_60		0x3C00
 #define LED1_CURRENT_50		0x3200
 #define LED1_CURRENT_40		0x2800
+#define LED1_CURRENT_38		0x2600
 #define LED1_CURRENT_34		0x2200
 #define LED1_CURRENT_32		0x2000
 #define LED1_CURRENT_30		0x1E00
@@ -277,10 +278,14 @@ typedef struct{
 #define LED1_CURRENT_23		0x1700
 #define LED1_CURRENT_22		0x1600
 #define LED1_CURRENT_20		0x1400
+#define LED1_CURRENT_17		0x1100
 #define LED1_CURRENT_15		0x0F00
 #define LED1_CURRENT_14		0x0E00
 #define LED1_CURRENT_13		0x0D00
 #define LED1_CURRENT_10		0x0A00
+#define LED1_CURRENT_05		0x0500
+#define LED1_CURRENT_01		0x0100
+#define LED1_CURRENT_00		0x0000
 
 #define LED2_CURRENT_250	0xFA00
 #define LED2_CURRENT_200	0xC800
@@ -335,6 +340,8 @@ typedef struct{
 #define LED2_CURRENT_14		0x0E00
 #define LED2_CURRENT_13		0x0D00
 #define LED2_CURRENT_10		0x0A00
+#define LED2_CURRENT_01		0x0100
+#define LED2_CURRENT_00		0x0000
 
 typedef enum
 {
@@ -364,3 +371,4 @@ uint8_t mod_rx_state(uint8_t port);
 uint32_t mod_get_rxMsg_data(uint8_t port);
 mod_rxMsgType * mod_get_rxMxg(uint8_t port);
 void mod_get_setting(uint8_t port, const Optic_settingType **setting, uint16_t *cnt);
+uint32_t Dec_to_Hex(int dec);
