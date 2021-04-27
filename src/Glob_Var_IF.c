@@ -30,10 +30,10 @@ float g_PRE_COND_SETPOINT = 97.0;   // 96 [0,120]
 int g_RT_Keeping_Minute_Peltier_Temperature = 7;
 float g_RT_PRE_COND_SETPOINT = 50.0; // 50 1cycle
 
-uint32_t g_optic_current_FAM = 0x8000;
-uint32_t g_optic_current_ROX = 0x8000;
-uint32_t g_optic_current_HEX = 0x8000;
-uint32_t g_optic_current_CY5 = 0x8000;
+uint32_t g_optic_current_FAM = 0x6400;
+uint32_t g_optic_current_ROX = 0x6400;
+uint32_t g_optic_current_HEX = 0x6400;
+uint32_t g_optic_current_CY5 = 0x6400;
 
 uint16_t check_FAM = 0;
 uint16_t check_ROX = 0;
@@ -202,7 +202,7 @@ void Check_Glob_Var(char *msg, int szmsg)
 	{
 		int vv;
 		sscanf(msg+12, "%d", &vv);
-		if(vv>=0 && vv<=60)
+		if(vv>=0 && vv<=1000)
 		{
 			g_Cooling_Sec = vv;
 			printf("g_COOLING_SEC = %d, input=%d\n", g_Cooling_Sec, vv);
@@ -212,7 +212,7 @@ void Check_Glob_Var(char *msg, int szmsg)
 	{
 		int vv;
 		sscanf(msg+33, "%d", &vv);
-		if(vv>=0 && vv<=60)
+		if(vv>=0 && vv<=1000)
 		{
 			g_Optic_Operation_Keeping_Temp_Sec = vv;
 			printf("g_OPTIC_OPERATION_KEEPING_TEMP_SEC = %d\n", g_Optic_Operation_Keeping_Temp_Sec);
@@ -222,7 +222,7 @@ void Check_Glob_Var(char *msg, int szmsg)
 	{
 		int vv;
 		sscanf(msg+26, "%d", &vv);
-		if(vv>=0 && vv<=60)
+		if(vv>=0 && vv<=1000)
 		{
 			g_Optic_No_Operation_Keeping_Temp_Sec = vv;
 			printf("g_2nd_STEP_KEEPING_TIME_SEC = %d\n", g_Optic_No_Operation_Keeping_Temp_Sec);
@@ -232,7 +232,7 @@ void Check_Glob_Var(char *msg, int szmsg)
 	{
 		int vv;
 		sscanf(msg+32, "%d", &vv);
-		if(vv>=0 && vv<=60)
+		if(vv>=0 && vv<=1000)
 		{
 			g_Delay_time_Before_Opting_Runing = vv;
 			printf("g_DELAY_TIME_BEFORE_OPTING_RUNING = %d\n", g_Delay_time_Before_Opting_Runing);
@@ -242,7 +242,7 @@ void Check_Glob_Var(char *msg, int szmsg)
 	{
 		int vv;
 		sscanf(msg+25, "%d", &vv);
-		if(vv>=0 && vv<=600)
+		if(vv>=0 && vv<=1000)
 		{
 			g_Keeping_Minute_Peltier_Temperature = vv;
 			printf("g_PRECOND_KEEPING_TIME_MIN = %d\n", g_Keeping_Minute_Peltier_Temperature);
@@ -252,7 +252,7 @@ void Check_Glob_Var(char *msg, int szmsg)
 	{
 		int vv;
 		sscanf(msg+26, "%d", &vv);
-		if(vv>=0 && vv<=60)
+		if(vv>=0 && vv<=1000)
 		{
 			g_Keeping_time_for_High_Temperature = vv;
 			printf("g_1st_STEP_KEEPING_TIME_SEC = %d\n", g_Keeping_time_for_High_Temperature);
@@ -305,7 +305,7 @@ void Check_Glob_Var(char *msg, int szmsg)
 	{
 		int vv;
 		sscanf(msg+28, "%d", &vv);
-		if(vv>=0 && vv<=60)
+		if(vv>=0 && vv<=1000)
 		{
 			g_RT_Keeping_Minute_Peltier_Temperature = vv;
 			printf("g_RT_PRECOND_KEEPING_TIME_MIN = %d\n", g_RT_Keeping_Minute_Peltier_Temperature);
@@ -343,7 +343,7 @@ void Check_Glob_Var(char *msg, int szmsg)
 		drv_inside_LED(ON);
 //		drv_water_fan(ON);
 //		drv_UV_LED(ON);
-		printf("FAN2_ON\n");
+		printf("LED_ON\n");
 	}
 	if(strncmp(msg, "FAN2_OFF", 8)==0)
 	{
@@ -351,7 +351,7 @@ void Check_Glob_Var(char *msg, int szmsg)
 		drv_inside_LED(OFF);
 //		drv_water_fan(OFF);
 //		drv_UV_LED(OFF);
-		printf("FAN2_OFF\n");
+		printf("LED_OFF\n");
 	}
 	if(strncmp(msg, "DOOR_LOCK", 9)==0)		//DOOR_OPEN
 	{
@@ -366,7 +366,9 @@ void Check_Glob_Var(char *msg, int szmsg)
 	if(strncmp(msg, "FELTIER_TEST", 12)==0)		//bjk 200902 add
 	{
 		printf("FELTIER_TEST\n");
-		ADC1_peltier_check();
+//		ADC1_peltier_check();
+		drv_UV_LED(ON);
+//		drv_self_check();
 	}
 	if(strncmp(msg, "check_start", 11)==0)		//bjk 200907 add
 	{

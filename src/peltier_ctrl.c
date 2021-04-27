@@ -362,7 +362,8 @@ uint8_t  peltier_ctrl_cycle_routine(void)
 		peltctrl.ctrl_kind = CYCLE_60;
 		if((g_rountine_cnt == 1) /*|| (g_rountine_cnt == 2) || (g_rountine_cnt == 3)*/)
 		{
-			keep_time = SECOND_UNIT * 60;//MINUTE_UNIT * 5;
+//			keep_time = SECOND_UNIT * 60;//MINUTE_UNIT * 5;
+			keep_time = SECOND_UNIT * g_Optic_No_Operation_Keeping_Temp_Sec;
 //			setPoint = peltier_delayed_SetPoint(63, UNDERSHOOT_OFFSET, SECOND_UNIT*30); //14, -8.0
 		}
 		else if(((g_rountine_cnt >= 5) && (g_rountine_cnt <= 7)) || Optic_Measure_Index_Flag[g_rountine_cnt]==1 || (g_rountine_cnt == MEA_ROUTINE_NO))

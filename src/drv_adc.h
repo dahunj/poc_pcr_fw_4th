@@ -9,6 +9,7 @@
 #define DRV_ADC_H_
 
 #include "stm32f10x_adc.h"
+#include "peltier_ctrl.h"
 
 
 #define ADC12_IN8_PORT  	GPIOB

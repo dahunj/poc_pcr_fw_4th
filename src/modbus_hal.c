@@ -1006,16 +1006,16 @@ void mod_get_setting(uint8_t port, const Optic_settingType **setting, uint16_t *
 
     if(port == MODBUS_PORT1)
     {
-        q1_model[0][20].value = g_optic_current_HEX; //ADD_REG_LED1_CURRENT, LED1_CURRENT_64
-        q1_model[0][21].value = g_optic_current_CY5; //ADD_REG_LED1_CURRENT, LED1_CURRENT_64
+        q1_model[0][20].value = g_optic_current_FAM; //ADD_REG_LED1_CURRENT, LED1_CURRENT_64
+        q1_model[0][21].value = g_optic_current_ROX; //ADD_REG_LED1_CURRENT, LED1_CURRENT_64
         
         *setting = &q1_model[0][0];
         *cnt = sizeof(q1_model[0]) / sizeof(Optic_settingType);
     }
     else if(port == MODBUS_PORT2)
     {
-        q1_model[1][20].value = g_optic_current_FAM; //ADD_REG_LED1_CURRENT, LED1_CURRENT_64
-        q1_model[1][21].value = g_optic_current_ROX; //ADD_REG_LED1_CURRENT, LED1_CURRENT_64
+        q1_model[1][20].value = g_optic_current_HEX; //ADD_REG_LED1_CURRENT, LED1_CURRENT_64
+        q1_model[1][21].value = g_optic_current_CY5; //ADD_REG_LED1_CURRENT, LED1_CURRENT_64
         *setting = &q1_model[1][0];
         *cnt = sizeof(q1_model[0]) / sizeof(Optic_settingType);
     }

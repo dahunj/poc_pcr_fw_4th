@@ -49,10 +49,12 @@ void drv_adc_init(uint8_t ADC_Channel)
 	//bsp_adc_gpio_init(ADC_Channel);
 	drv_adc_gpio_init(ADC_Channel);
 	
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
+
 	/* ADC1 configuration ------------------------------------------------------*/
 	ADC_InitStructure.ADC_Mode = ADC_Mode_Independent;
-	ADC_InitStructure.ADC_ScanConvMode = ENABLE;
-	ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;
+	ADC_InitStructure.ADC_ScanConvMode = DISABLE;//ENABLE;
+	ADC_InitStructure.ADC_ContinuousConvMode = DISABLE;//ENABLE;
 	ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_None;
 	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
 	ADC_InitStructure.ADC_NbrOfChannel = 1;
@@ -62,6 +64,7 @@ void drv_adc_init(uint8_t ADC_Channel)
 	if( ADC_Channel == ADC_Channel_8 )
 	{
 		ADC_RegularChannelConfig(ADC1, ADC_Channel_8, 1, ADC_SampleTime_55Cycles5);
+		printf("ADC_CH8_INIT\n");
 	}
 		
 	
@@ -76,13 +79,13 @@ void drv_adc_init(uint8_t ADC_Channel)
 	}  
   
 	ADC_Cmd(ADC1, ENABLE);
-	ADC_SoftwareStartConvCmd(ADC1,ENABLE);
+//	ADC_SoftwareStartConvCmd(ADC1,ENABLE);
 }
-
+#if 0
 void ADC1_peltier_check(void)
 {
 	uint16_t value;
-
+	printf("Test start\n");
 	drv_adc_init(ADC_Channel_8);
 	GPIO_WriteBit(GPIOC, GPIO_Pin_9, 1);	//test module power enable
 	for(int i = 0; i < 10 ; i++)
@@ -93,7 +96,7 @@ void ADC1_peltier_check(void)
 		value = ADC_GetConversionValue(ADC1);
 		ADC_ClearFlag(ADC1, ADC_FLAG_EOC);
 
-		printf("Current low value = %d\n", value);
+		printf("Current row value = %d\n", value);
 		for(int i = 0; i < 500000; i++)
 		{
 
@@ -104,4 +107,30 @@ void ADC1_peltier_check(void)
 
 	self_check_flag = FALSE;
 }
+#endif
 
+void ADC1_peltier_check(void)
+{
+	uint16_t value;
+	printf("Test start\n");
+	drv_adc_init(ADC_Channel_8);
+	for(int i = 0; i < 10 ; i++)
+	{
+		printf("check %d\n", i);
+		ADC_SoftwareStartConvCmd(ADC1, ENABLE);
+		while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC))
+		{}
+
+		value = ADC_GetConversionValue(ADC1);
+		ADC_ClearFlag(ADC1, ADC_FLAG_EOC);
+
+		printf("Current row value = %d\n", value);
+		for(int i = 0; i < 500000; i++)
+		{
+
+		}
+	}
+	printf("Test finish\n");
+
+	self_check_flag = FALSE;
+}

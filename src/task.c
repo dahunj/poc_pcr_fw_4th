@@ -20,7 +20,7 @@
 #define AGEING_TEST 0
 #define EXTRACTION 0
 #define OPTIC_ACTION 1
-#define TEST 0
+#define TEST 1
 
 #define MACHINE_NUM 3
 
@@ -67,9 +67,9 @@
 #define PUMPINGDELAY	(((PUMPING * PUMPSPEED) / 1000) + 200)
 #define NEEDLESTEP	2750
 #define NEEDLEDELAY	(((NEEDLESTEP * SMSPEED) / 1000) + 200)
-#define PUMPSTEP	1400
+#define PUMPSTEP	1790//1400
 #define PUMPDELAY	(((PUMPING * PUMPSPEED) / 1000) + 200)
-#define PUSH		1200
+#define PUSH		1590
 #define PUSHDELAY	(((PUSH * PUMPSPEED) / 1000) + 200)
 #define VACCUMSTEP	750
 #define VACCUMDELAY	(((VACCUMSTEP * SMSPEED) / 1000) + 200)
@@ -122,7 +122,8 @@
 #define OPTIC_TEST_CMD	0x87
 #define OPTIC_TEST1_CMD	0x88
 #define OPTIC_TEST2_CMD	0x89
-
+/* test 210409 */
+#define PEL_TEST_CMD	0x90
 /* infinity aging test */
 uint8_t infinity_start_stop_flag = FALSE;
 extern uint8_t infinity_opt_flag;
@@ -167,6 +168,8 @@ extern int g_optic_e2d2_value;
 uint8_t g_optic_test_on_flag = FALSE;
 uint8_t g_optic_test1_on_flag = FALSE;
 uint8_t g_optic_test2_on_flag = FALSE;
+/* test 210409 */
+uint8_t g_pel_test_on_flag = FALSE;
 
 uint8_t g_op_exe_flag = FALSE; // Add 2019.10.07
 uint8_t g_op_mea_exe_flag = FALSE; // Add 2019.10.22
@@ -197,11 +200,13 @@ extern uint8_t g_pel_ctrl_heat_flag;		/* 210303 test */
 extern uint8_t g_pel_ctrl_cool_flag;		/* 210303 test */
 uint8_t g_pel_temp_check_flag = FALSE;		/* 210303 test */
 
+extern uint8_t g_UV_start_flag;			/* 210406 test */
+extern uint8_t g_UV_finish_flag;		/* 210406 test */
+
 const stSeqDesc		diag_seq_desc[SEQ_DESC_IDX_MAX] = {
 #if TEST
 		{TASKID_SM2, 2000, SERINGUESTEP, 600, SMOOTHON, DOWN},	//SERINGUESTEP
-#if 1
-
+#if 0
 		{TASKID_OPT, 3000, CHAM_1_2, 1, CONTINUE, 0},
 		{TASKID_OM, 2500, 4500, 200, 0, CCW},	// chamber1 -> 2
 		{TASKID_OPT, 1000, CHAM_2_3, 1, CONTINUE, 0},
@@ -211,12 +216,12 @@ const stSeqDesc		diag_seq_desc[SEQ_DESC_IDX_MAX] = {
 		{TASKID_OPT, 1000, CHAM_4_1, 1, DIS_CONT, 0},
 		{TASKID_OM, 2500, 9000, 200, 0, CW},
 		{TASKID_OM, 2000, 4500, 200, 0, CW},	// chamber4 -> 1
-
-
+#endif
 		{TASKID_OM, 4000, 2250, OMSPEED, 0, CW},							/* Lysis */
 		{TASKID_SM3, 1500, PUSH, PUMPSPEED, SMOOTHON, DOWN},
 		{TASKID_SM3, PUSHDELAY, PUSH, PUMPSPEED, SMOOTHON, UP},
 		{TASKID_OM, PUSHDELAY, 2300, OMSPEED, 0, CCW},					/* Zero Position */
+#if 1
 		{TASKID_SM3, 1800, PUMPSTEP, PUMPSPEED, SMOOTHON, DOWN},			/*Shaking start*/
 		{TASKID_SM3, PUMPDELAY, LYSISPUMP, PUMPSPEED, SMOOTHON, UP},
 		{TASKID_SM3, LYSISDELAY, LYSISPUMP, PUMPSPEED, SMOOTHON, DOWN},
@@ -236,7 +241,8 @@ const stSeqDesc		diag_seq_desc[SEQ_DESC_IDX_MAX] = {
 		{TASKID_SM3, LYSISDELAY, LYSISPUMP, PUMPSPEED, SMOOTHON, DOWN},
 		{TASKID_SM3, LYSISDELAY, LYSISPUMP, PUMPSPEED, SMOOTHON, UP},
 		{TASKID_SM3, LYSISDELAY, LYSISPUMP, PUMPSPEED, SMOOTHON, DOWN},
-		{TASKID_SM3, LYSISDELAY, LYSISPUMP, PUMPSPEED, SMOOTHON, UP},			/* Shaking 10 */
+//		{TASKID_SM3, LYSISDELAY, LYSISPUMP, PUMPSPEED, SMOOTHON, UP},			/* Shaking 10 */
+#if 0
 		{TASKID_SM3, LYSISDELAY, LYSISPUMP, PUMPSPEED, SMOOTHON, DOWN},
 		{TASKID_SM3, LYSISDELAY, LYSISPUMP, PUMPSPEED, SMOOTHON, UP},
 		{TASKID_SM3, LYSISDELAY, LYSISPUMP, PUMPSPEED, SMOOTHON, DOWN},
@@ -316,40 +322,35 @@ const stSeqDesc		diag_seq_desc[SEQ_DESC_IDX_MAX] = {
 		{TASKID_SM3, LYSISDELAY, LYSISPUMP, PUMPSPEED, SMOOTHON, DOWN},
 		{TASKID_SM3, LYSISDELAY, LYSISPUMP, PUMPSPEED, SMOOTHON, UP},
 		{TASKID_SM3, LYSISDELAY, LYSISPUMP, PUMPSPEED, SMOOTHON, DOWN},
-		{TASKID_SM3, 300000, PUMPSTEP, PUMPSPEED, SMOOTHON, UP},			/* Shaking 50 */
+#endif
+		{TASKID_SM3, 3000, PUMPSTEP, PUMPSPEED, SMOOTHON, UP},			/* Shaking 50 */
 #endif
 		{TASKID_SM4, 3800, MAGNETSTEP, SMSPEED, SMOOTHON, DOWN},
 
-		{TASKID_OM, 1200, 3500, 800, 0, CW},		//tube4
-		{TASKID_OM, 2900, 500, 800, 0, CCW},
-//		{TASKID_SM4, 500, 300, SMSPEED, SMOOTHON, UP},
-//		{TASKID_OM, 300, 3750, 200, 0, CW},
-//		{TASKID_SM1, 800, VACCUMSTEP, SMSPEED, SMOOTHON, DOWN},
-//		{TASKID_SM2, VACCUMDELAY, 120, 600, SMOOTHON, UP},
-//		{TASKID_SM1, 300, VACCUMSTEP, SMSPEED, SMOOTHON, UP},
-//		{TASKID_SM2, VACCUMDELAY, 120, 600, SMOOTHON, DOWN},		//240=1mL
-/*
-		{TASKID_SM1, 1200, VACCUMSTEP, SMSPEED, SMOOTHON, DOWN},
-		{TASKID_SM2, VACCUMDELAY, 4700, 600, SMOOTHON, UP},
+		{TASKID_OM, 1200, 3600, 800, 0, CW},		//tube4
+//		{TASKID_OM, 2900, 750, 800, 0, CCW},
+		{TASKID_SM4, 500, 300, SMSPEED, SMOOTHON, UP},
+		{TASKID_OM, 300, 3150, 200, 0, CW},
+		{TASKID_SM1, 800, VACCUMSTEP, SMSPEED, SMOOTHON, DOWN},
+		{TASKID_SM2, VACCUMDELAY, 60, 600, SMOOTHON, UP},
 		{TASKID_SM1, 300, VACCUMSTEP, SMSPEED, SMOOTHON, UP},
-		{TASKID_SM2, VACCUMDELAY, 4700, 600, SMOOTHON, DOWN},		//240=1mL
-*/
-//		{TASKID_OM, 110, 3750, 200, 0, CCW},
-//		{TASKID_SM4, 800, 300, SMSPEED, SMOOTHON, DOWN},
+		{TASKID_SM2, VACCUMDELAY, 60, 600, SMOOTHON, DOWN},		//240=1mL
+		{TASKID_OM, 110, 3100, 200, 0, CCW},
+		{TASKID_SM4, 800, 300, SMSPEED, SMOOTHON, DOWN},
 
-//		{TASKID_OM, 900, 3000, 800, 0, CCW},
-//		{TASKID_OM, 2400, 500, 800, 0, CCW},
-//		{TASKID_OM, 400, 500, 800, 0, CW},
-//		{TASKID_SM4, 800, MAGNETSTEP, SMSPEED, SMOOTHON, UP},
-#if 1
-		{TASKID_OM, 1400, 5000, 800, 0, CW},		//tube3 300
-		{TASKID_OM, 4100, 500, 800, 0, CCW},
+		{TASKID_OM, 1400, 3650, 800, 0, CCW},
+		{TASKID_OM, 2400, 1000, 800, 0, CCW},
+		{TASKID_OM, 400, 1000, 800, 0, CW},
+		{TASKID_SM4, 800, MAGNETSTEP, SMSPEED, SMOOTHON, UP},
+#if 0
+		{TASKID_OM, 400, 5250, 800, 0, CW},		//tube3 300
+		{TASKID_OM, 4100, 750, 800, 0, CCW},
 		{TASKID_SM4, 500, 300, SMSPEED, SMOOTHON, UP},
 		{TASKID_OM, 300, 3750, 200, 0, CW},
 		{TASKID_SM1, 800, VACCUMSTEP, SMSPEED, SMOOTHON, DOWN},
-		{TASKID_SM2, VACCUMDELAY, 240, 600, SMOOTHON, UP},
+		{TASKID_SM2, VACCUMDELAY, 528, 600, SMOOTHON, UP},
 		{TASKID_SM1, 1300, VACCUMSTEP, SMSPEED, SMOOTHON, UP},
-		{TASKID_SM2, VACCUMDELAY, 240, 600, SMOOTHON, DOWN},		//240=1mL
+		{TASKID_SM2, VACCUMDELAY, 528, 600, SMOOTHON, DOWN},		//240=1mL
 /*
 		{TASKID_SM1, 1200, VACCUMSTEP, SMSPEED, SMOOTHON, DOWN},
 		{TASKID_SM2, VACCUMDELAY, 4700, 600, SMOOTHON, UP},
@@ -360,14 +361,14 @@ const stSeqDesc		diag_seq_desc[SEQ_DESC_IDX_MAX] = {
 		{TASKID_SM4, 800, 300, SMSPEED, SMOOTHON, DOWN},
 
 
-		{TASKID_OM, 300, 5000, 800, 0, CW},		//tube2 300
-		{TASKID_OM, 4100, 500, 800, 0, CCW},
+		{TASKID_OM, 300, 5250, 800, 0, CW},		//tube2 300
+		{TASKID_OM, 4100, 750, 800, 0, CCW},
 		{TASKID_SM4, 500, 300, SMSPEED, SMOOTHON, UP},
 		{TASKID_OM, 300, 3750, 200, 0, CW},
 		{TASKID_SM1, 800, VACCUMSTEP, SMSPEED, SMOOTHON, DOWN},
-		{TASKID_SM2, VACCUMDELAY, 240, 600, SMOOTHON, UP},
+		{TASKID_SM2, VACCUMDELAY, 528, 600, SMOOTHON, UP},
 		{TASKID_SM1, 1300, VACCUMSTEP, SMSPEED, SMOOTHON, UP},
-		{TASKID_SM2, VACCUMDELAY, 240, 600, SMOOTHON, DOWN},		//240=1mL
+		{TASKID_SM2, VACCUMDELAY, 528, 600, SMOOTHON, DOWN},		//240=1mL
 /*
 		{TASKID_SM1, 1200, VACCUMSTEP, SMSPEED, SMOOTHON, DOWN},
 		{TASKID_SM2, VACCUMDELAY, 4700, 600, SMOOTHON, UP},
@@ -377,19 +378,19 @@ const stSeqDesc		diag_seq_desc[SEQ_DESC_IDX_MAX] = {
 		{TASKID_OM, 110, 3750, 200, 0, CCW},
 		{TASKID_SM4, 800, 300, SMSPEED, SMOOTHON, DOWN},
 
-		{TASKID_OM, 900, 6000, 800, 0, CCW},	//300
+		{TASKID_OM, 300, 6000, 800, 0, CCW},	//300
 		{TASKID_OM, 4800, 6000, 800, 0, CCW},
 		{TASKID_OM, 4800, 500, 800, 0, CCW},
 		{TASKID_OM, 400, 500, 800, 0, CW},
 
-		{TASKID_OM, 400, 2000, 800, 0, CCW},	//tube1
-		{TASKID_OM, 1700, 500, 800, 0, CW},
+		{TASKID_OM, 400, 2250, 800, 0, CCW},	//tube1
+		{TASKID_OM, 1700, 750, 800, 0, CW},
 		{TASKID_SM4, 500, 300, SMSPEED, SMOOTHON, UP},
 		{TASKID_OM, 400, 1500, 200, 0, CW},
 		{TASKID_SM1, 200, VACCUMSTEP, SMSPEED, SMOOTHON, DOWN},
-		{TASKID_SM2, VACCUMDELAY, 240, 600, SMOOTHON, UP},
+		{TASKID_SM2, VACCUMDELAY, 528, 600, SMOOTHON, UP},
 		{TASKID_SM1, 1300, VACCUMSTEP, SMSPEED, SMOOTHON, UP},
-		{TASKID_SM2, VACCUMDELAY, 240, 600, SMOOTHON, DOWN},		//240=1mL
+		{TASKID_SM2, VACCUMDELAY, 528, 600, SMOOTHON, DOWN},		//240=1mL
 /*
 		{TASKID_SM1, 1200, VACCUMSTEP, SMSPEED, SMOOTHON, DOWN},
 		{TASKID_SM2, VACCUMDELAY, 4700, 600, SMOOTHON, UP},
@@ -404,7 +405,7 @@ const stSeqDesc		diag_seq_desc[SEQ_DESC_IDX_MAX] = {
 		{TASKID_OM, 400, 500, 800, 0, CCW},
 
 		{TASKID_SM4, 800, MAGNETSTEP, SMSPEED, SMOOTHON, UP},
-
+#if 0
 		{TASKID_OPT, 4000, CHAM_1_2, 1, CONTINUE, 0},
 		{TASKID_OM, 2500, 4500, 200, 0, CCW},	// chamber1 -> 2
 		{TASKID_OPT, 1000, CHAM_2_3, 1, CONTINUE, 0},
@@ -414,6 +415,7 @@ const stSeqDesc		diag_seq_desc[SEQ_DESC_IDX_MAX] = {
 		{TASKID_OPT, 1000, CHAM_4_1, 1, DIS_CONT, 0},
 		{TASKID_OM, 2500, 9000, 200, 0, CW},
 		{TASKID_OM, 2000, 4500, 200, 0, CW},	// chamber4 -> 1
+#endif
 
 #endif
 
@@ -2019,9 +2021,29 @@ void task_q(void)
 	stSeqDesc* pseq_desc_tmp;
 	uint16_t i;
 	uint8_t door_state;		/* 0402 test*/
+	static uint16_t cnt = 0;
+	static uint16_t sec_cnt = 1;
 
 	/* DeQueue */
 	job_id = dequeue_job();
+
+	if(g_UV_start_flag == TRUE)
+	{
+		cnt++;
+		if((cnt % 200) == 0)
+		{
+			printf("UV_CHECK: %d \n", sec_cnt);
+			sec_cnt++;
+			if((sec_cnt % 60) == 0)
+			{
+				g_UV_finish_flag = TRUE;
+				drv_UV_LED(OFF);
+				cnt = 0;
+				sec_cnt = 1;
+			}
+		}
+
+	}
 
 #if AGEING_TEST
 	if(infinity_start_stop_flag == TRUE)
@@ -2065,6 +2087,8 @@ void task_q(void)
 		drv_pwm_all_stop();
 		peltier_stop();
 		peltier_ctrl_init_variables();
+
+		job_id = STOP_CMD;
 
 		printf("LOG g_temp_read_error\n");
 //		g_op_exe_flag = TRUE;
@@ -2250,7 +2274,7 @@ void task_q(void)
 			g_optic_test2_on_flag = TRUE;
 			
 			break;	
-			
+
 		default:
 			break;
 	}
@@ -2934,7 +2958,7 @@ void task_pel(void)
 
 	if( (opration_start_flag == TRUE) && ((cnt % 10) == 0))
 	{
-		check_cnt++;
+//		check_cnt++;
 		// peltier_get_tempearture();
 		peltier_get_tempearture_2();
 
@@ -2946,6 +2970,7 @@ void task_pel(void)
 #if 0
 		if(g_pel_ctrl_heat_flag == TRUE)
 		{
+			check_cnt++;
 			if(g_pel_temp_check_flag == FALSE)
 			{
 				g_pel_temp_check_flag = TRUE;
@@ -2959,11 +2984,13 @@ void task_pel(void)
 					printf("LOG pel check\n");
 				}
 				g_pel_temp_check_flag = FALSE;
+				check_cnt = 0;
 			}
 		}
 
 		if(g_pel_ctrl_cool_flag == TRUE)
 		{
+			check_cnt++;
 			if(g_pel_temp_check_flag == FALSE)
 			{
 				g_pel_temp_check_flag = TRUE;
@@ -2977,13 +3004,18 @@ void task_pel(void)
 					printf("LOG pump check\n");
 				}
 				g_pel_temp_check_flag = FALSE;
+				check_cnt = 0;
 			}
+		}
+		if((g_pel_ctrl_heat_flag == FALSE) && (g_pel_ctrl_cool_flag == FALSE))
+		{
+			check_cnt = 0;
 		}
 #endif
 	}
 	#endif
 
-	if(opr_ptr.job_assigned_flag == TRUE)
+	if((opr_ptr.job_assigned_flag == TRUE))
 	{
 		if( this_task.init_flag == FALSE)
 		{
@@ -2999,7 +3031,7 @@ void task_pel(void)
 		{
 			case JOB_READY:
 
-				if( opr_ptr.seq_ptr_curr->task_id == this_task.task_id) 
+				if( (opr_ptr.seq_ptr_curr->task_id == this_task.task_id))
 				{
 					if(opration_start_flag == FALSE)
 					{
@@ -3009,7 +3041,7 @@ void task_pel(void)
 						/* set action */
 						curr_time = get_time_ms_cnt();
 					
-						if( (curr_time - opr_ptr.prev_start_time ) >= this_seq_desc->job_gap_time)
+						if( ((curr_time - opr_ptr.prev_start_time ) >= this_seq_desc->job_gap_time))
 						{
 							opr_ptr.task_ptr = &this_task;
 							
@@ -3046,7 +3078,7 @@ void task_pel(void)
 						}
 						#endif
 						
-						if(peltier_ctrl_pre_cond( g_RT_PRE_COND_SETPOINT,  MINUTE_UNIT * g_RT_Keeping_Minute_Peltier_Temperature ) == TRUE) 	/* 10s */
+						if(peltier_ctrl_pre_cond( g_RT_PRE_COND_SETPOINT,  SECOND_UNIT * g_RT_Keeping_Minute_Peltier_Temperature ) == TRUE) 	/* 10s */
 						//if( peltier_pwm_test( 100,  MINUTE_UNIT * 5 ) == TRUE )	
 						{
 							this_task.job_status = JOB_RUN;
@@ -3700,7 +3732,7 @@ uint8_t msg_parse(void)
 		}
 		else if( strcmp( buf, "forceFan") == 0)
 		{
-			printf("forece fan\n");
+			printf("force fan\n");
 			drv_peltier_fan_blow(ON);
 			drv_water_fan(ON);
 		}

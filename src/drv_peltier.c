@@ -217,52 +217,48 @@ void drv_water_fan(uint8_t on_off)
 	}
 }
 
-#if 0
-static uint8_t UV_flag = 0;
+#if 1
+uint8_t g_UV_start_flag = 0;
+uint8_t g_UV_finish_flag = 0;
 
 void drv_UV_LED(uint8_t on_off)
 {
-	volatile uint32_t time = get_time_ms_cnt();
-	static uint32_t since_time;
 	uint8_t door_state = door_sensor_check();
 
 //	if(door_state == CLOSE)
 	{
 		if(on_off == ON)
 		{
-			if(UV_flag == 0)
+			if(g_UV_start_flag == 0)
 			{
 				GPIO_WriteBit(GPIOC, GPIO_Pin_9, ON);
-				UV_flag = 1;
-				since_time = time;
+				g_UV_start_flag = 1;
 				printf("UV_ON\n");
 			}
 
-				if((time - since_time) > 60000)
-				{
-					GPIO_WriteBit(GPIOC, GPIO_Pin_9, OFF);
-					UV_flag = 0;
-					on_off = OFF;
-					printf("UV_OFF\n");
-				}
-				if(on_off == OFF)
-				{
-					GPIO_WriteBit(GPIOC, GPIO_Pin_9, OFF);
-					UV_flag = 0;
-					printf("UV_OFF\n");
-				}
+			if(g_UV_finish_flag == 1)
+			{
+				GPIO_WriteBit(GPIOC, GPIO_Pin_9, OFF);
+				g_UV_finish_flag = 0;
+				g_UV_start_flag = 0;
+				on_off = OFF;
+				printf("UV_OFF\n");
+			}
+
 		}
 		else
 		{
 			GPIO_WriteBit(GPIOC, GPIO_Pin_9, OFF);
-			UV_flag = 0;
+			g_UV_start_flag = 0;
+			g_UV_finish_flag = 0;
 			printf("UV_OFF\n");
 		}
 	}
 //	else
 //	{
 //		GPIO_WriteBit(GPIOC, GPIO_Pin_9, OFF);
-//		UV_flag = FALSE;
+//		g_UV_start_flag = 0;
+//		g_UV_finish_flag = 0;
 //		on_off = OFF;
 //		printf("CLOSE_DOOR\n");
 //	}
