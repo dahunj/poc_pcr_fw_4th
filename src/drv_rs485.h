@@ -1,9 +1,4 @@
-/*
- * drv_rs485.h
- *
- *  Created on: 2019. 7. 25.
- *      Author: jk.choi
- */
+
 
 #ifndef DRV_RS485_H_
 #define DRV_RS485_H_
