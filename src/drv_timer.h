@@ -1,9 +1,4 @@
-/*
- * drv_timer.h
- *
- *  Created on: 2019. 7. 1.
- *      Author: jk.choi
- */
+
 
 #ifndef DRV_TIMER_H_
 #define DRV_TIMER_H_
